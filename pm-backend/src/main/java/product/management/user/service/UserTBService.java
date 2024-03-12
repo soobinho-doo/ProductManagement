@@ -1,5 +1,7 @@
 package product.management.user.service;
 
+import java.util.Map;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import product.management.user.dto.UserTB;
@@ -11,9 +13,9 @@ public interface UserTBService {
 		boolean hasByEmail(String user_email);
 		boolean hasByPhone(String user_phone);
 		
-		String login(UserTB userTB, HttpServletRequest request, HttpServletResponse response);
+		Map<String, String> login(UserTB userTB, HttpServletRequest request, HttpServletResponse response);
 		void logout(HttpServletRequest request, HttpServletResponse response);
-		String againToken(HttpServletRequest request, HttpServletResponse response, String rt);
+		Map<String, String> againToken(HttpServletRequest request, HttpServletResponse response, String rt);
 		UserTB findUserTBByToken(HttpServletRequest request);
 		
 		// INSERT

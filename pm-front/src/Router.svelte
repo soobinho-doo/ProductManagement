@@ -1,65 +1,43 @@
 <script lang="ts">
     import Router from "svelte-spa-router";
-    import axios from "axios";
-    import { isConnection } from "./option/store";
+    import { auth, isLogin, isRefresh } from "./option/auth";
 
-    let routes:any;
-
-    //
-    let userTB = []
-    const isLogin = async () => {
-        await axios.get("/api/user").then((res) => {
-            userTB = res.data;
-            if(userTB.user_auth === "ROLE_A"){
-                routes = {
-                    "/":MainPage,
-                    "/login":ErrorAlreadyLoginPage,
-                    "/register":ErrorAlreadyLoginPage,
-                    "/mypage":MyPage,
-                    "/menu":MenuPage,
-                    "/setting":SettingPage,
-                    "/branchoffice/register":BranchOfficeRegister,
-                    "/branchoffice/list":BranchOfficeListPage,
-                    "/product/register":ProductRegister,
-                    "/product/list":ProductListPage,
-                    "/stock/register":StockRegister,
-                    "/stock/list":StockListPage,
-                    "/stock/backup/list":StockBackupListPage,
-                    "/salesstatus":SalesStatusPage,
-                    "*":Error404Page,
-                }
+    onMount(() => {
+        const refreshInterval = setTimeout(() => {
+            if($isRefresh){
+                auth.refresh();
             }else{
-                routes = {
-                    "/":MainPage,
-                    "/login":ErrorAlreadyLoginPage,
-                    "/register":ErrorAlreadyLoginPage,
-                    "/mypage":MyPage,
-                    "/menu":MenuPage,
-                    "/setting":SettingPage,
-                    "/branchoffice/register":BranchOfficeRegister,
-                    "/branchoffice/list":BranchOfficeListPage,
-                    "/product/register":ProductRegister,
-                    "/product/list":ProductListPage,
-                    "/stock/register":StockRegister,
-                    "/stock/list":StockListPage,
-                    "/stock/backup/list":StockBackupListPage,
-                    "/salesstatus":SalesStatusPage,
-                    "*":Error404Page,
-                }
+                clearInterval(refreshInterval);
             }
-        }).catch();
-    }
-    
-    // 비로그인 시 
-    if(!$isConnection){
-        routes = {
-            "/":LoginPage,
-            "/login":LoginPage,
-            "/register":RegisterPage,
-            "/forgot/id":ForgotIdPage,
-            "/forgot/pass":ForgotPassPage,
+        }, 1000 * 60 * 29)
+    })
+
+    let routes:any = {
+            "/":MainPage,
+            "/login":ErrorAlreadyLoginPage,
+            "/register":ErrorAlreadyLoginPage,
+            "/mypage":MyPage,
+            "/menu":MenuPage,
+            "/setting":SettingPage,
+            "/branchoffice/register":BranchOfficeRegister,
+            "/branchoffice/list":BranchOfficeListPage,
+            "/product/register":ProductRegister,
+            "/product/list":ProductListPage,
+            "/stock/register":StockRegister,
+            "/stock/list":StockListPage,
+            "/stock/backup/list":StockBackupListPage,
+            "/salesstatus":SalesStatusPage,
             "*":Error404Page,
         }
+    
+    // 비로그인 시 
+    let noRoutes = {
+        "/":LoginPage,
+        "/login":LoginPage,
+        "/register":RegisterPage,
+        "/forgot/id":ForgotIdPage,
+        "/forgot/pass":ForgotPassPage,
+        "*":Error404Page,
     }
 
     // Page
@@ -94,13 +72,14 @@
 
     // 현황 관련
     import SalesStatusPage from "./page/salesstatus/SalesStatusPage.svelte";
+    import { onMount } from "svelte";
 
 </script>
 
-{#if $isConnection}
-    {#await isLogin() then }
+{#await auth.refresh() then}
+    {#if $isLogin}
         <Router routes={routes} restoreScrollState={true}/>
-    {/await}
-{:else}
-    <Router routes={routes} restoreScrollState={true}/>
-{/if}
+    {:else}
+        <Router routes={noRoutes} restoreScrollState={true}/>
+    {/if}
+{/await}

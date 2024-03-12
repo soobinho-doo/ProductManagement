@@ -69,6 +69,7 @@ body::-webkit-scrollbar-track {
 
 /* Color */
 .color-white {color:#FFF;}
+.text-white {color:#FFF;}
 .color-tomato {color:tomato;}
 .color-custom-blue {color: #2198d5;}
 .color-b1 {color: #b1b1b1;}

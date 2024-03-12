@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,7 +56,7 @@ public class BranchOfiiceTBController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@PutMapping("/branch-office/{branch_office_sq}")
+	@PatchMapping("/branch-office/{branch_office_sq}")
 	public ResponseEntity<Integer> modifyBranchOfficeTB(@PathVariable(value="branch_office_sq") Long branch_office_sq, @RequestBody BranchOfficeTB branchOfficeTB) {
 		int result = branchOfficeTBService.modifyBranchOfficeTB(branchOfficeTB);
 		

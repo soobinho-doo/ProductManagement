@@ -2,15 +2,16 @@
     import Header from "../../layout/Header.svelte";
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
     import Modal from "../../component/Modal.svelte";
-    import axios from "axios";
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
+    import {branchOffice} from "../../option/branchOffice";
+    import { noti } from "../../option/store";
 
     onMount(() => {
         getBranchOfficeList(cp);
     })
 
-    // 등록
+    // 리스트
     let branchOfficeDatas:any = [];
     let cp:number; // 첫 페이지 번호
     let rowCount:number = 0;
@@ -27,21 +28,22 @@
             cp: cpNum, 
             keyword:keyword, 
         }
-        await axios.post("/api/branch-office/paging", data).then((res) => {
-            //console.log(res.data);
-            branchOfficeDatas = res.data.list;
-            rowCount = res.data.count;
-            cp = res.data.cp;
-            sp = res.data.sp;
-            ep = res.data.ep;
-            pageCount = res.data.pageCount;
+        
+        let branchOfficeInfo:any = await branchOffice.list(data);
+            
+        branchOfficeDatas = branchOfficeInfo.list;
+        rowCount = branchOfficeInfo.count;
+        cp = branchOfficeInfo.cp;
+        sp = branchOfficeInfo.sp;
+        ep = branchOfficeInfo.ep;
+        pageCount = branchOfficeInfo.pageCount;
 
-            pageDatas = [];
-            for(let i=sp; i<=ep; i++){
-                pageDatas.push(i);
-                pageDatas = pageDatas;
-            }
-        }).catch((err) => {});
+        pageDatas = [];
+        for(let i=sp; i<=ep; i++){
+            pageDatas.push(i);
+            pageDatas = pageDatas;
+        }
+
     }
 
     // 수정
@@ -56,11 +58,11 @@
         sequence = sq;
     }
     const getBranchOffice = async () => {
-        await axios.get("/api/branch-office/"+sequence).then((res) =>{
-            sequence = res.data.branch_office_sq;
-            branchOfficeName = res.data.branch_office_nm;
-            barnchOfficeArea = res.data.branch_office_area;
-        }).catch((err)=>{})
+        let branchOfficeInfo = await branchOffice.info(sequence);
+
+        sequence = branchOfficeInfo.branch_office_sq;
+        branchOfficeName = branchOfficeInfo.branch_office_nm;
+        barnchOfficeArea = branchOfficeInfo.branch_office_area;
     }
 
     //
@@ -75,33 +77,35 @@
     }
 
     const modifyBranchOffice = async () => {
-        let datas = {
+        let data = {
             branch_office_sq:sequence,
             branch_office_nm:branchOfficeName,
             branch_office_area:barnchOfficeArea, 
         }
-        await axios.put("/api/branch-office/"+sequence, datas).then((res)=>{
+        let branchOfficeModify = await branchOffice.modify(sequence, data);
+        if(branchOfficeModify === 1){
             isModal = false;
             getBranchOfficeList(cp);
-        }).catch((err)=>{});
+            noti.success("지점 수정 완료", 2000)
+        }
     }
 
     // 삭제
-    const deleteBranchOfficeButton = (sq:number) => {
+    const deleteBranchOfficeButton = (sequence:number) => {
         if(confirm("삭제 하시겠습니까?\n삭제 후 데이터는 복구 되지 않습니다")){
-            alert("정상적으로 삭제되었습니다.");
-            deleteBranchOffice(sq);
+            deleteBranchOffice(sequence);
         }else{
             alert("취소 되었습니다");
         }
     }
 
-    const deleteBranchOffice = async (sq:number) => {
-        await axios.delete("/api/branch-office/"+sq).then((res)=>{
+    const deleteBranchOffice = async (sequence:number) => {
+        let branchOfficeDel = await branchOffice.del(sequence);
+        if(branchOfficeDel === 1){
             getBranchOfficeList(cp);
-        }).catch((err)=>{});
+            noti.success("지점 삭제 완료", 2000)
+        }
     }
-
 
 </script>
 
@@ -149,8 +153,8 @@
                 </div>
             
 
-            <!-- Body -->
-            <!-- <div class="mt-10 display-table width-100"> -->
+                <!-- Body -->
+                <!-- <div class="mt-10 display-table width-100"> -->
                 {#if branchOfficeDatas.length !== 0}
                     {#each branchOfficeDatas as data}
                         <div class="mt-10 display-table-row">
@@ -221,7 +225,7 @@
         <!-- 지점명 -->
         <div>
             <span class="fs-16 pretendard-bold">지점명 <span class="color-tomato">*</span></span>
-            <div class="mt-5">
+            <div class="mt-10">
                 <input type="text" class="fs-16 pretendard-regular border-default border-radius-4 padding-8-12 width-100" bind:value={branchOfficeName} placeholder="지점명 입력"/>
             </div>
         </div>
@@ -229,7 +233,7 @@
         <!-- 지점이 위치한 지역이름 -->
         <div class="mt-20">
             <span class="fs-16 pretendard-bold">지점이 위치한 지역이름 <span class="color-tomato">*</span></span>
-            <div class="mt-5">
+            <div class="mt-10">
                 <input type="text" class="fs-16 pretendard-regular border-default border-radius-4 padding-8-12 width-100" bind:value={barnchOfficeArea} placeholder="지점이 위치한 지역이름 입력"/>
                 <p class="mt-5 fs-14 pretendard-regular color-b1">Ex) 서울, 전주 등</p>
             </div>

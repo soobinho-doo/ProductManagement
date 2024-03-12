@@ -3,6 +3,7 @@
     import axios from "axios";
     import { link, push, replace } from 'svelte-spa-router';
     import {isConnection} from "../../option/store";
+    import { auth } from "../../option/auth";
 
     // 변수
     let userId:string = "";
@@ -34,22 +35,15 @@
             userPassElement.focus();
 
         }else{
-            getToken();
+            login();
         }
     }
-    const getToken = async () => {
+    const login = async () => {
         let data = {
             user_id: userId,
             user_pass:userPass
         }
-        await axios.post("/api/user/login", data).then((res) => {
-            let token = res.data;
-            if(token){
-                axios.defaults.headers.common["Authorization"] = "Bearer "+token;
-                isConnection.set(true);
-                replace("/");
-            }
-        }).catch((err) => {errorMsg = "Id or Password Fail";});
+        await auth.login(data);
     }
 
     // Option //

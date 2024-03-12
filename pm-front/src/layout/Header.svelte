@@ -1,26 +1,22 @@
 <script lang="ts">
     import DownMenuBar from "./DownMenuBar.svelte";
-    import axios from "axios";
+    import { account } from "../option/account";
     import { link, push } from "svelte-spa-router";
-    import { isConnection} from "../option/store";
     import DropDown from "../component/DropDown.svelte";
+    import { auth } from "../option/auth";
 
     //
 
     // Method
     // Logout
     const logout = async () => {
-        await axios.get("/api/user/logout").then((res) => {
-            isConnection.set(false)
-            window.location.href="/"
-        }).catch((err) => {});
+        await auth.logout();
     }
     // UserInfo
     let userName:string = "";
     const getUserInfo = async () => {
-        await axios.get("/api/user").then((res) => {
-            userName = res.data.user_nm;
-        }).catch((err) => {});
+        let getDatas = await account.info();
+        userName = getDatas.user_nm
     }
 
     //

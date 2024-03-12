@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { push } from "svelte-spa-router";
     import Header from "../../layout/Header.svelte";
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
-    import axios from "axios";
+    import { branchOffice } from "../../option/branchOffice";
 
     let branchOfficeName:string = "";
     let barnchOfficeArea:string = "";
@@ -18,13 +17,11 @@
     }
 
     const branchOfficeRegister = async () => {
-        let datas = {
+        let data = {
             branch_office_nm:branchOfficeName,
             branch_office_area:barnchOfficeArea, 
         }
-        await axios.post("/api/branch-office", datas).then((res)=>{
-            push("/branchoffice/list")
-        }).catch((err)=>{});
+        await branchOffice.input(data);
     }
 
 </script>
@@ -50,7 +47,7 @@
             <!-- 지점명 -->
             <div>
                 <span class="fs-16 pretendard-bold">지점명 <span class="color-tomato">*</span></span>
-                <div class="mt-5">
+                <div class="mt-10">
                     <input type="text" class="fs-16 pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={branchOfficeName} placeholder="지점명 입력"/>
                 </div>
             </div>
@@ -58,9 +55,9 @@
             <!-- 지점이 위치한 지역이름 -->
             <div class="mt-20">
                 <span class="fs-16 pretendard-bold">지점이 위치한 지역이름 <span class="color-tomato">*</span></span>
-                <div class="mt-5">
+                <div class="mt-10">
                     <input type="text" class="fs-16 pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={barnchOfficeArea} placeholder="지점이 위치한 지역이름 입력"/>
-                    <p class="mt-5 fs-14 pretendard-regular color-b1">Ex) 서울, 부산, 전주 등</p>
+                    <p class="mt-5 fs-14 pretendard-regular color-b1">Ex) 서울, 전주 등</p>
                 </div>
             </div>
 

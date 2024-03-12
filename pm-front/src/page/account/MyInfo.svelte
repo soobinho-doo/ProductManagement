@@ -1,18 +1,17 @@
 <script lang="ts">
-    import axios from "axios";
     import LoadingPage from "../../loading/LoadingPage.svelte";
     import ErrorAxiosPage from "../error/ErrorAxiosPage.svelte";
+    import { account } from "../../option/account";
 
     // 변수
     let userTB:any = []
 
     // Method 
-    const test = async () => {
-        await axios.get("/api/user").then((res) => {
-            userTB = res.data;
-        }).catch();
+    const userInfo = async () => {
+        userTB = await account.info();
     }
-    let promise = test();
+    let promise = userInfo();
+
 </script>
 {#await promise}
     <LoadingPage/>

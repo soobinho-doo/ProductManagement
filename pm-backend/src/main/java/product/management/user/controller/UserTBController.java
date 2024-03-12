@@ -1,5 +1,7 @@
 package product.management.user.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +28,8 @@ public class UserTBController {
 	
 	// 로그인
 	@PostMapping("/user/login")
-	public ResponseEntity<String> login(@RequestBody UserTB userTB, HttpServletRequest request, HttpServletResponse response){
-		String accessToken = userTBService.login(userTB, request, response);
+	public ResponseEntity<Map<String, String>> login(@RequestBody UserTB userTB, HttpServletRequest request, HttpServletResponse response){
+		Map<String, String> accessToken = userTBService.login(userTB, request, response);
 		
 		return ResponseEntity.ok(accessToken);
 	}
@@ -47,15 +49,15 @@ public class UserTBController {
 	}
 	
 	// 새로고침 시 토큰 체크 후 발급
-	@PostMapping("/user/again-token")
-	public ResponseEntity<String> againToken(@CookieValue(name="rt", required = false) String rt, HttpServletRequest request, HttpServletResponse response) {
-		String againToken = userTBService.againToken(request, response, rt);
+	@GetMapping("/user/again-token")
+	public ResponseEntity<Map<String, String>> againToken(@CookieValue(name="rt", required = false) String rt, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> againToken = userTBService.againToken(request, response, rt);
 		
 		return ResponseEntity.ok(againToken);
 	}
 	
 	// 토큰으로 유저 정보 가져오기
-	@GetMapping("/user")
+	@PostMapping("/user/info")
 	public ResponseEntity<UserTB> detailsByToken(HttpServletRequest request){
 		UserTB userTB = userTBService.findUserTBByToken(request);
 		

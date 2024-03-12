@@ -1,5 +1,8 @@
 package product.management.user.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +48,8 @@ public class UserTBServiceImp implements UserTBService {
 	}
 
 	@Override
-	public String login(UserTB userTB, HttpServletRequest request, HttpServletResponse response) {
+	public Map<String, String> login(UserTB userTB, HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> result = new HashMap<String, String>();
 		String accessToken = null;
 		String refreshToken = null;
 		
@@ -57,11 +61,13 @@ public class UserTBServiceImp implements UserTBService {
         if(!bCryptPasswordEncoder.matches(userTB.getUser_pass(), user.getUser_pass())){
             throw new IllegalArgumentException("잘못된 비밀번호 입니다");
         }else {
-	    		TokenVO tokenVO = jwtProvider.createToken(user);
-	    		accessToken = tokenVO.getAccess_token();
-	    		refreshToken = tokenVO.getRefresh_token();
-	    		
-	    		// 리프레쉬 쿠키에 저장
+    		TokenVO tokenVO = jwtProvider.createToken(user);
+    		accessToken = tokenVO.getAccess_token();
+    		refreshToken = tokenVO.getRefresh_token();
+    		
+    		result.put("Authorization", accessToken);
+    		
+    		// 리프레쉬 쿠키에 저장
 	        Cookie cookie = new Cookie("rt", refreshToken);
 	        cookie.setHttpOnly(true);
 	        cookie.setMaxAge(24 * 60 * 60); // 1일 설정
@@ -72,7 +78,7 @@ public class UserTBServiceImp implements UserTBService {
 	        response.addCookie(cookie);
         }
 		
-		return accessToken;
+		return result;
 	}
 
 	@Override
@@ -85,8 +91,10 @@ public class UserTBServiceImp implements UserTBService {
 	}
 
 	@Override
-	public String againToken(HttpServletRequest request, HttpServletResponse response, String rt) {
-		String refreshToken = "Bearer "+ rt;
+	public Map<String, String> againToken(HttpServletRequest request, HttpServletResponse response, String rt) {
+		Map<String, String> result = new HashMap<String, String>();
+
+		String refreshToken = rt;
 		String accessToken = null;
 		
 		if(rt != null && jwtProvider.validateToken(refreshToken)) {
@@ -94,7 +102,7 @@ public class UserTBServiceImp implements UserTBService {
 			UserTB user = userTBMapper.selectByUserId(user_id);
 			TokenVO tokenVO = jwtProvider.createToken(user);
 			accessToken = tokenVO.getAccess_token();
-			
+			result.put("Authorization", accessToken);
 		}else {
 			Cookie cookie = new Cookie("rt", null);
 	        cookie.setMaxAge(0);
@@ -103,15 +111,16 @@ public class UserTBServiceImp implements UserTBService {
 	        response.addCookie(cookie);
 			
 			accessToken = null;
+			result.put("Authorization", accessToken);
 		}
 		
-		return accessToken;
+		return result;
 	}
 
 	@Override
 	public UserTB findUserTBByToken(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
-		
+	
 		String user_id = jwtProvider.getIdByToken(token);
 		UserTB userTB = userTBMapper.selectByUserId(user_id);
 		

@@ -95,12 +95,13 @@ public class JwtProvider {
     // Token 유효성 및 만료일자 검증
     public boolean validateToken(String token) {
     	
-		if(!token.substring(0, "Bearer ".length()).equalsIgnoreCase("Bearer ")){
-            return false;
-        }else{
-            token = token.split(" ")[1].trim();
-        }
-    		
+//		if(!token.substring(0, "Bearer ".length()).equalsIgnoreCase("Bearer ")){
+//            return false;
+//        }else{
+//            token = token.split(" ")[1].trim();
+//        }
+    	token.trim();
+    	
 		Jws<Claims> claims = Jwts.parser().verifyWith(setSecretKey()).build().parseSignedClaims(token);
         return !claims.getPayload().getExpiration().before(new Date());
     }
@@ -108,8 +109,8 @@ public class JwtProvider {
     // 유효한 토큰을 가지고 있을 때 아이디 값 얻기
     public String getIdByToken(String token) {
 		String id = null;
-		if(token != null && validateToken(token)) {
-			token = token.split(" ")[1].trim();
+		if(token != null) {
+			//token = token.split(" ")[1].trim();
 			Authentication authInfo = authentication(token);
 			id = authInfo.getName();
 		}else {
