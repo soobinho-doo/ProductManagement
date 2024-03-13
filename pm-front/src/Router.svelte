@@ -1,6 +1,7 @@
 <script lang="ts">
     import Router from "svelte-spa-router";
     import { auth, isLogin, isRefresh } from "./option/auth";
+    import { get } from "svelte/store";
 
     onMount(() => {
         const refreshInterval = setTimeout(() => {
@@ -12,23 +13,45 @@
         }, 1000 * 60 * 29)
     })
 
+    let role = get(auth).role;
+
+    // 로그인 시 Auth = USER
     let routes:any = {
-            "/":MainPage,
-            "/login":ErrorAlreadyLoginPage,
-            "/register":ErrorAlreadyLoginPage,
-            "/mypage":MyPage,
-            "/menu":MenuPage,
-            "/setting":SettingPage,
-            "/branchoffice/register":BranchOfficeRegister,
-            "/branchoffice/list":BranchOfficeListPage,
-            "/product/register":ProductRegister,
-            "/product/list":ProductListPage,
-            "/stock/register":StockRegister,
-            "/stock/list":StockListPage,
-            "/stock/backup/list":StockBackupListPage,
-            "/salesstatus":SalesStatusPage,
-            "*":Error404Page,
-        }
+        "/":MainPage,
+        "/login":ErrorAlreadyLoginPage,
+        "/register":ErrorAlreadyLoginPage,
+        "/mypage":MyPage,
+        "/menu":MenuPage,
+        "/setting":SettingPage,
+        "/branchoffice/register":BranchOfficeRegister,
+        "/branchoffice/list":BranchOfficeListPage,
+        "/product/register":ProductRegister,
+        "/product/list":ProductListPage,
+        "/stock/register":StockRegister,
+        "/stock/list":StockListPage,
+        "/stock/backup/list":StockBackupListPage,
+        "/salesstatus":SalesStatusPage,
+        "*":Error404Page,
+    }
+
+    // 로그인 시 Auth = ADMIN 
+    let adminRoutes:any = {
+        "/":MainPage,
+        "/login":ErrorAlreadyLoginPage,
+        "/register":ErrorAlreadyLoginPage,
+        "/mypage":MyPage,
+        "/menu":MenuPage,
+        "/setting":SettingPage,
+        "/branchoffice/register":BranchOfficeRegister,
+        "/branchoffice/list":BranchOfficeListPage,
+        "/product/register":ProductRegister,
+        "/product/list":ProductListPage,
+        "/stock/register":StockRegister,
+        "/stock/list":StockListPage,
+        "/stock/backup/list":StockBackupListPage,
+        "/salesstatus":SalesStatusPage,
+        "*":Error404Page,
+    }
     
     // 비로그인 시 
     let noRoutes = {
@@ -78,7 +101,11 @@
 
 {#await auth.refresh() then}
     {#if $isLogin}
-        <Router routes={routes} restoreScrollState={true}/>
+        {#if role === "ROLE_ADMIN"}
+            <Router routes={adminRoutes} restoreScrollState={true}/>
+        {:else if role === "ROLE_USER"}
+            <Router routes={routes} restoreScrollState={true}/>
+        {/if} 
     {:else}
         <Router routes={noRoutes} restoreScrollState={true}/>
     {/if}

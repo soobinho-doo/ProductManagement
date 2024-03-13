@@ -65,6 +65,7 @@ public class UserTBServiceImp implements UserTBService {
     		accessToken = tokenVO.getAccess_token();
     		refreshToken = tokenVO.getRefresh_token();
     		
+    		result.put("role", user.getUser_auth());
     		result.put("Authorization", accessToken);
     		
     		// 리프레쉬 쿠키에 저장
@@ -102,6 +103,8 @@ public class UserTBServiceImp implements UserTBService {
 			UserTB user = userTBMapper.selectByUserId(user_id);
 			TokenVO tokenVO = jwtProvider.createToken(user);
 			accessToken = tokenVO.getAccess_token();
+			
+			result.put("role", user.getUser_auth());
 			result.put("Authorization", accessToken);
 		}else {
 			Cookie cookie = new Cookie("rt", null);
@@ -111,6 +114,7 @@ public class UserTBServiceImp implements UserTBService {
 	        response.addCookie(cookie);
 			
 			accessToken = null;
+			result.put("role", null);
 			result.put("Authorization", accessToken);
 		}
 		

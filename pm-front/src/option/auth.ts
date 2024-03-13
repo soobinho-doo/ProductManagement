@@ -6,9 +6,9 @@ import { replace } from "svelte-spa-router";
 //
 function setAuth () {
     let initDatas = {
-        user_id:'',
+        id : '',
         user_email : '',
-        user_auth:'', 
+        role : '', 
         Authorization : '',
     }
 
