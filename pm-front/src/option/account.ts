@@ -23,12 +23,12 @@ function setAccount() {
     }
     const updateInfo = async () => {}
     const deleteInfo = async () => {
-        const email = get(auth).user_email;
+        const id = get(auth).id;
         const accessToken = get(auth).Authorization;
 
         try{
             const options = {
-                path: '/api/user/'+email,
+                path: '/api/user/'+id,
                 data: {},
                 accessToken:accessToken,
             }

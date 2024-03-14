@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,11 +68,6 @@ public class ProductTBController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/product/authentication")
-	public ResponseEntity<String> stockAuthentication(HttpServletRequest request) {
-		String user_id = productTBService.productAuthentication(request);
-		return ResponseEntity.ok(user_id);
-	}
 	
 	@GetMapping("/product/excel/download")
 	public void findStockTBByExcel(@RequestParam(value="user_id") String user_id, @RequestParam(value="keyword") String keyword,@RequestParam(value="branch_office_nm") String branch_office_nm, HttpServletResponse response) throws IOException {
@@ -85,7 +81,7 @@ public class ProductTBController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@PutMapping("/product/{product_sq}")
+	@PatchMapping("/product/{product_sq}")
 	public ResponseEntity<Integer> modifyProductTB(@RequestBody ProductTB productTB, @PathVariable(value="product_sq") Long product_sq) {
 		int result = productTBService.modifyProductTB(productTB, product_sq);
 		

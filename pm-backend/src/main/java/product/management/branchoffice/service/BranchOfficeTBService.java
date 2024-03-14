@@ -8,9 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import product.management.branchoffice.dto.BranchOfficeTB;
 
 public interface BranchOfficeTBService {
-	List<BranchOfficeTB> findBranchOfficeTBListByUserId(HttpServletRequest request);
-	BranchOfficeTB findBranchOfficeTBByBranchOfficeSq(Long branch_office_sq);
+	
 	Map<String, Object> findBranchOfficeTBPaging(HashMap<String, String> map, HttpServletRequest request);
+	
+	BranchOfficeTB findBranchOfficeTBByBranchOfficeSq(Long branch_office_sq);
 	
 	int inputBranchOfficeTB(BranchOfficeTB branchOfficeTB, HttpServletRequest request);
 	

@@ -2,7 +2,7 @@
     import { flip } from "svelte/animate";
     import { fly } from "svelte/transition";
     import { noti } from "../option/store";
-    export let themes = {
+    export let themes:any = {
         danger: "#E26D69",
         success: "#84C991",
         warning: "#f0ad4e",
@@ -21,7 +21,6 @@
             transition:fly={{ y: 30 }}
         >
             <div class="fs-16 pretendard-regular text-white">{notification.message}</div>
-            {#if notification.icon}<i class={notification.icon} />{/if}
         </div>
     {/each}
 </div>
@@ -29,6 +28,7 @@
 <style>
     .noti {
         position: fixed;
+        bottom: 100px;
         left: 0;
         right: 0;
         margin: 0 auto;

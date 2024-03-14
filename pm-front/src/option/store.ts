@@ -1,11 +1,5 @@
 import { writable, readable, derived } from "svelte/store";
 
-// 로그인 판별
-export const isConnection = writable(false);
-
-// 로그인 시간 정보
-export const connectionTime = writable(1000 * 60 * 1);
-
 // 밝은, 다크 모드 
 export const isTheme = writable(true);
 
@@ -16,7 +10,7 @@ const createNotificationStore = () => {
 
     const send = (message:any, type = "default", timeout:any) => {
         _notifications.update( (state):any => {
-            return [{ id: id(), type, message, timeout }]
+            return [...state, { id: id(), type, message, timeout }]
         })
     }
 
@@ -52,4 +46,4 @@ const id =() => {
 
 
 // Export 
-export const noti = createNotificationStore(); // 토스트
+export const noti:any = createNotificationStore(); // 토스트

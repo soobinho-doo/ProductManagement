@@ -1,6 +1,7 @@
 <script lang="ts">
     import axios from "axios";
     import { link, push, replace } from "svelte-spa-router";
+    import { noti } from "../../option/store";
 
     // 변수
     let idVal:string = "";
@@ -241,17 +242,14 @@
         user_phone : phoneVal.trim(),
     }
 
-    await axios.post("/api/user", datas)
-    .then((res)=>{
-        //console.log("Login Response \n"+res.data)
+    await axios.post("/api/user", datas).then((res)=>{
         if(res.data === 1){
-            //window.location.href="/"
             replace("/")
+            noti.success("회원가입 완료", 2000)
         }
     }).catch((err)=>{});
 
     }
-    
 
 </script>
 

@@ -65,6 +65,7 @@ public class UserTBServiceImp implements UserTBService {
     		accessToken = tokenVO.getAccess_token();
     		refreshToken = tokenVO.getRefresh_token();
     		
+    		result.put("id", user.getUser_id());
     		result.put("role", user.getUser_auth());
     		result.put("Authorization", accessToken);
     		
@@ -104,6 +105,7 @@ public class UserTBServiceImp implements UserTBService {
 			TokenVO tokenVO = jwtProvider.createToken(user);
 			accessToken = tokenVO.getAccess_token();
 			
+			result.put("id", user.getUser_id());
 			result.put("role", user.getUser_auth());
 			result.put("Authorization", accessToken);
 		}else {
@@ -114,6 +116,7 @@ public class UserTBServiceImp implements UserTBService {
 	        response.addCookie(cookie);
 			
 			accessToken = null;
+			result.put("id", null);
 			result.put("role", null);
 			result.put("Authorization", accessToken);
 		}

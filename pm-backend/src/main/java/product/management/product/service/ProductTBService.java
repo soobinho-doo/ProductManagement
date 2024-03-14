@@ -19,7 +19,6 @@ public interface ProductTBService {
 	
 	Map<String, Object> findProductTBPaging(HashMap<String, String> map, HttpServletRequest request);
 	
-	String productAuthentication(HttpServletRequest request);
 	void findProductTBListByExcel(String user_id, String keyword, String branch_office_nm, HttpServletResponse response) throws IOException;
 	
 	// Insert

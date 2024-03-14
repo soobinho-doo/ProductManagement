@@ -1,22 +1,22 @@
-import { get, writable } from "svelte/store";
+import { get } from "svelte/store";
 import { delApi, getApi, patchApi, postApi } from "./api";
 import { auth } from "./auth";
-import { push } from "svelte-spa-router";
 import { noti } from "./store";
+import { push } from "svelte-spa-router";
 
-function setBranchOffice () {
+function setProduct () {
 
     //
     const list = async (data:any) => {
         const accessToken = get(auth).Authorization;
         try{
             const options = {
-                path : '/api/branch-office/paging', 
-                data : data, 
-                accessToken : accessToken
+                path : '/api/product/paging', 
+                data : data,
+                accessToken : accessToken,
             }
-            const branchOfficeList:any = await postApi(options);
-            return branchOfficeList
+            const productList:any = await postApi(options)
+            return productList
 
         }catch(err){
             throw err
@@ -24,17 +24,15 @@ function setBranchOffice () {
     }
 
     //
-    const info = async (sequence:number) => {
+    const info = async (sq:number) => {
         const accessToken = get(auth).Authorization;
-        
         try{
             const options = {
-                path : "/api/branch-office/"+sequence, 
+                path : "/api/product/"+sq, 
                 accessToken : accessToken,
             }
-            const branchOfficeInfo = await getApi(options)
-            return branchOfficeInfo
-
+            const productInfo = await getApi(options);
+            return productInfo
         }catch(err){
             throw err
         }
@@ -45,46 +43,48 @@ function setBranchOffice () {
         const accessToken = get(auth).Authorization;
         try{
             const options = {
-                path : '/api/branch-office', 
+                path : '/api/product', 
                 data : data, 
                 accessToken : accessToken,
             }
-            const branchOfficeInput = await postApi(options);
-            if(branchOfficeInput === 1){
-                push("/branchoffice/list")
-                noti.success("지점 등록 완료", 2000)
+            const productInput = await postApi(options);
+            if(productInput === 1){
+                push("/product/list")
+                noti.success("상품 등록 완료", 2000)
             }
+        }catch(err){
+            throw err
+        }
+    }
+
+    //
+    const modify = async (sq:number, data:any) => {
+        const accessToken = get(auth).Authorization;
+        try{
+            const options = {
+                path : "/api/product/"+sq, 
+                data : data, 
+                accessToken : accessToken,
+            }
+            const productModify = await patchApi(options)
+            return productModify
             
         }catch(err){
             throw err
         }
     }
+
     //
-    const modify = async (sequence:number, data:any) => {
+    const del = async (sq:number) => {
         const accessToken = get(auth).Authorization;
         try{
             const options = {
-                path : "/api/branch-office/"+sequence, 
-                data : data, 
+                path : "/api/product/"+sq, 
                 accessToken : accessToken,
             }
-            const branchOfficeModify = await patchApi(options);
-            return branchOfficeModify
-  
-        }catch(err){
-            throw err
-        }
-    }
-    const del = async (sequence:number) => {
-        const accessToken = get(auth).Authorization;
-        try{
-            const options = {
-                path : "/api/branch-office/"+sequence, 
-                accessToken : accessToken,
-            }
-            const branchOfficeDel = await delApi(options);
-            return branchOfficeDel
-  
+            const productDel = await delApi(options)
+            return productDel
+
         }catch(err){
             throw err
         }
@@ -99,4 +99,4 @@ function setBranchOffice () {
     }
 }
 
-export const branchOffice = setBranchOffice(); 
+export const product = setProduct();

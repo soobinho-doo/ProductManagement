@@ -1,6 +1,5 @@
 <script lang="ts">
     import axios from "axios";
-    import { isConnection } from "../../option/store";
 
     // 1 Step
     let oneStep:boolean = false;
@@ -29,12 +28,8 @@
     // 유저의 비밀번호가 일치하는지 
     const deleteUser = async () => {
         let data = {
-                user_pass: passVal,
-            }
-        await axios.post("/api/user/delete", data).then((res) => {
-            isConnection.set(false);
-            window.location.href="/"
-        }).catch((err) => { errorMsg = "비밀번호가 일치하지 않습니다";})
+            user_pass: passVal,
+        }
     }
 
      

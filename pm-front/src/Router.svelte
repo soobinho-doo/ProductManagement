@@ -13,8 +13,6 @@
         }, 1000 * 60 * 29)
     })
 
-    let role = get(auth).role;
-
     // 로그인 시 Auth = USER
     let routes:any = {
         "/":MainPage,
@@ -50,6 +48,7 @@
         "/stock/list":StockListPage,
         "/stock/backup/list":StockBackupListPage,
         "/salesstatus":SalesStatusPage,
+        "/admin":AdminMainPage,
         "*":Error404Page,
     }
     
@@ -97,13 +96,16 @@
     import SalesStatusPage from "./page/salesstatus/SalesStatusPage.svelte";
     import { onMount } from "svelte";
 
+    // 관리자 페이지
+    import AdminMainPage from "./page/admin/AdminMainPage.svelte";
+
 </script>
 
 {#await auth.refresh() then}
     {#if $isLogin}
-        {#if role === "ROLE_ADMIN"}
+        {#if get(auth).role === "ROLE_ADMIN"}
             <Router routes={adminRoutes} restoreScrollState={true}/>
-        {:else if role === "ROLE_USER"}
+        {:else if get(auth).role === "ROLE_USER"}
             <Router routes={routes} restoreScrollState={true}/>
         {/if} 
     {:else}

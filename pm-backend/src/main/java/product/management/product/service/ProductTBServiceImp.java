@@ -120,12 +120,6 @@ public class ProductTBServiceImp implements ProductTBService {
 		return result;
 	}
 	
-	@Override
-	public String productAuthentication(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
-		String user_id = jwtProvider.getIdByToken(token);
-		return user_id;
-	}
 
 	@Override
 	public void findProductTBListByExcel(String user_id, String keyword, String branch_office_nm,
@@ -134,126 +128,126 @@ public class ProductTBServiceImp implements ProductTBService {
 		List<ProductTB> datas = productTBMapper.selectProductTBListByExcel(user_id, branch_office_nm, keyword);
 		
 		// 엑셀 파일 하나를 만듭니다
-				/**
-		         * excel sheet 생성
-		         */
-		        Workbook workbook = new XSSFWorkbook();
-		        Sheet sheet = workbook.createSheet("상품현황"); // 엑셀 sheet 이름
-		        
+			/**
+	         * excel sheet 생성
+	         */
+	        Workbook workbook = new XSSFWorkbook();
+	        Sheet sheet = workbook.createSheet("상품현황"); // 엑셀 sheet 이름
+	        
 
-		        // 스타일
-		        CellStyle headerStyle = workbook.createCellStyle();
-		        headerStyle.setAlignment(HorizontalAlignment.CENTER);  
-		        Font font = workbook.createFont();
-		        font.setFontHeightInPoints((short) 12);
-		        font.setBold(true);
-		        headerStyle.setFont(font);
-		        
-		        /**
-		         * header data
-		         */
-		        int rowCount = 0; // 데이터가 저장될 행
-		        String headerNames[] = new String[]{"지점", "진열", "상품", "단위", "단가", "수수료", "납품", "판매", "회수", "재고", "수익"};
+	        // 스타일
+	        CellStyle headerStyle = workbook.createCellStyle();
+	        headerStyle.setAlignment(HorizontalAlignment.CENTER);  
+	        Font font = workbook.createFont();
+	        font.setFontHeightInPoints((short) 12);
+	        font.setBold(true);
+	        headerStyle.setFont(font);
+	        
+	        /**
+	         * header data
+	         */
+	        int rowCount = 0; // 데이터가 저장될 행
+	        String headerNames[] = new String[]{"지점", "진열", "상품", "단위", "단가", "수수료", "납품", "판매", "회수", "재고", "수익"};
 
-		        Row headerRow = null;
-		        Cell headerCell = null;
-		        
-		        headerRow = sheet.createRow(rowCount++);
-		        for(int i=0; i<headerNames.length; i++) {
-		            headerCell = headerRow.createCell(i);
-		            headerCell.setCellValue(headerNames[i]); // 데이터 추가
-		            headerCell.setCellStyle(headerStyle);
-		        }
+	        Row headerRow = null;
+	        Cell headerCell = null;
+	        
+	        headerRow = sheet.createRow(rowCount++);
+	        for(int i=0; i<headerNames.length; i++) {
+	            headerCell = headerRow.createCell(i);
+	            headerCell.setCellValue(headerNames[i]); // 데이터 추가
+	            headerCell.setCellStyle(headerStyle);
+	        }
 
-		        
-		        
-		        /**
-		         * body data
-		         */
-		        
-		        CellStyle centerStyle = workbook.createCellStyle();
-		        centerStyle.setAlignment(HorizontalAlignment.CENTER);  
-		        
-		        CellStyle rightStyle = workbook.createCellStyle();
-		        rightStyle.setAlignment(HorizontalAlignment.RIGHT);
+	        
+	        
+	        /**
+	         * body data
+	         */
+	        
+	        CellStyle centerStyle = workbook.createCellStyle();
+	        centerStyle.setAlignment(HorizontalAlignment.CENTER);  
+	        
+	        CellStyle rightStyle = workbook.createCellStyle();
+	        rightStyle.setAlignment(HorizontalAlignment.RIGHT);
 
-		        Row bodyRow = null;
-		        Cell bodyCell = null;
+	        Row bodyRow = null;
+	        Cell bodyCell = null;
 
-		        for(ProductTB data : datas) {
-			        	bodyRow = sheet.createRow(rowCount++);
-			        	
-			        	bodyCell = bodyRow.createCell(0);
-			        	bodyCell.setCellValue(data.getBranch_office_nm()); // 데이터 추가
-		        		bodyCell.setCellStyle(centerStyle);
-		        		
-		        		bodyCell = bodyRow.createCell(1);
-			            if(data.getProduct_st().equals("1")) {
-			            		bodyCell.setCellValue("기본"); // 데이터 추가
-			            		bodyCell.setCellStyle(centerStyle);
-			            }else if(data.getProduct_st().equals("2")) {
-			            		bodyCell.setCellValue("냉장"); // 데이터 추가
-			            		bodyCell.setCellStyle(centerStyle);
-			            }else if(data.getProduct_st().equals("3")) {
-			            		bodyCell.setCellValue("냉동"); // 데이터 추가
-			            		bodyCell.setCellStyle(centerStyle);
-			            }
-			        	
-		            bodyCell = bodyRow.createCell(2);
-		            bodyCell.setCellValue(data.getProduct_nm()); // 데이터 추가
-		            
-		            bodyCell = bodyRow.createCell(3);
-		            bodyCell.setCellValue(data.getProduct_weight()+" "+data.getProduct_weight_dt()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(4);
-		            bodyCell.setCellValue(data.getProduct_price()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(5);
-		            bodyCell.setCellValue(data.getProduct_commission()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(6);
-		            bodyCell.setCellValue(data.getProduct_stock()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(7);
-		            bodyCell.setCellValue(data.getProduct_sell()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(8);
-		            bodyCell.setCellValue(data.getProduct_recall()); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(9);
-		            int have = data.getProduct_stock() - data.getProduct_sell() - data.getProduct_recall();
-		            bodyCell.setCellValue(have); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		            bodyCell = bodyRow.createCell(10);
-		            int sellMoney = (int) ((data.getProduct_price() * data.getProduct_sell()) - ((data.getProduct_price() * data.getProduct_sell()) * Double.parseDouble(data.getProduct_commission()) / 100));
-		            bodyCell.setCellValue(sellMoney); // 데이터 추가
-		            bodyCell.setCellStyle(rightStyle);
-		            
-		        }
-		        
-		        //컬럼 너비 자동 설정
-		        for (int i=0; i<=headerNames.length; i++){
-					sheet.autoSizeColumn(i);
-					sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+(short)2400);
-				}
-		        
+	        for(ProductTB data : datas) {
+	        	bodyRow = sheet.createRow(rowCount++);
+	        	
+	        	bodyCell = bodyRow.createCell(0);
+	        	bodyCell.setCellValue(data.getBranch_office_nm()); // 데이터 추가
+        		bodyCell.setCellStyle(centerStyle);
+        		
+        		bodyCell = bodyRow.createCell(1);
+	            if(data.getProduct_st().equals("1")) {
+	            		bodyCell.setCellValue("기본"); // 데이터 추가
+	            		bodyCell.setCellStyle(centerStyle);
+	            }else if(data.getProduct_st().equals("2")) {
+	            		bodyCell.setCellValue("냉장"); // 데이터 추가
+	            		bodyCell.setCellStyle(centerStyle);
+	            }else if(data.getProduct_st().equals("3")) {
+	            		bodyCell.setCellValue("냉동"); // 데이터 추가
+	            		bodyCell.setCellStyle(centerStyle);
+	            }
+	        	
+            bodyCell = bodyRow.createCell(2);
+            bodyCell.setCellValue(data.getProduct_nm()); // 데이터 추가
+            
+            bodyCell = bodyRow.createCell(3);
+            bodyCell.setCellValue(data.getProduct_weight()+" "+data.getProduct_weight_dt()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(4);
+            bodyCell.setCellValue(data.getProduct_price()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(5);
+            bodyCell.setCellValue(data.getProduct_commission()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(6);
+            bodyCell.setCellValue(data.getProduct_stock()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(7);
+            bodyCell.setCellValue(data.getProduct_sell()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(8);
+            bodyCell.setCellValue(data.getProduct_recall()); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(9);
+            int have = data.getProduct_stock() - data.getProduct_sell() - data.getProduct_recall();
+            bodyCell.setCellValue(have); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+            bodyCell = bodyRow.createCell(10);
+            int sellMoney = (int) ((data.getProduct_price() * data.getProduct_sell()) - ((data.getProduct_price() * data.getProduct_sell()) * Double.parseDouble(data.getProduct_commission()) / 100));
+            bodyCell.setCellValue(sellMoney); // 데이터 추가
+            bodyCell.setCellStyle(rightStyle);
+            
+        }
+        
+        //컬럼 너비 자동 설정
+        for (int i=0; i<=headerNames.length; i++){
+			sheet.autoSizeColumn(i);
+			sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+(short)2400);
+		}
+        
 
-		        LocalDate today = LocalDate.now();
-		        String fileName = today+"_로컬푸드_상품현황";
+        LocalDate today = LocalDate.now();
+        String fileName = today+"_로컬푸드_상품현황";
 
-		        response.setContentType("application/vnd.ms-excel");
-		        response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode(fileName, "UTF-8")+".xlsx");
-		        //파일명은 URLEncoder로 감싸주는게 좋다!
+        response.setContentType("application/vnd.ms-excel");
+        response.setHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode(fileName, "UTF-8")+".xlsx");
+        //파일명은 URLEncoder로 감싸주는게 좋다!
 
-		        workbook.write(response.getOutputStream());
-		        workbook.close();
+        workbook.write(response.getOutputStream());
+        workbook.close();
 		
 	}
 	

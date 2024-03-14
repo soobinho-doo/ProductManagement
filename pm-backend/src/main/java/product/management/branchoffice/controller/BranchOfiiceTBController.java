@@ -27,11 +27,11 @@ public class BranchOfiiceTBController {
 
 	private final BranchOfficeTBService branchOfficeTBService;
 	
-	@GetMapping("/branch-office")
-	public ResponseEntity<List<BranchOfficeTB>> findBranchOfficeTBListByUserId(HttpServletRequest request) {
-		List<BranchOfficeTB> list = branchOfficeTBService.findBranchOfficeTBListByUserId(request);
+	@PostMapping("/branch-office/paging")
+	public ResponseEntity<Map<String, Object>> findBranchOfficeTBPaging(@RequestBody  HashMap<String, String> map, HttpServletRequest request) {
+		Map<String, Object> result = branchOfficeTBService.findBranchOfficeTBPaging(map, request);
 		
-		return ResponseEntity.ok(list);
+		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping("/branch-office/{branch_office_sq}")
@@ -40,14 +40,6 @@ public class BranchOfiiceTBController {
 		
 		return ResponseEntity.ok(branchOfficeTB);
 	}
-	
-	@PostMapping("/branch-office/paging")
-	public ResponseEntity<Map<String, Object>> findBranchOfficeTBPaging(@RequestBody  HashMap<String, String> map, HttpServletRequest request) {
-		Map<String, Object> result = branchOfficeTBService.findBranchOfficeTBPaging(map, request);
-		
-		return ResponseEntity.ok(result);
-	}
-	
 	
 	@PostMapping("/branch-office")
 	public ResponseEntity<Integer> inputBranchOfficeTB(@RequestBody BranchOfficeTB branchOfficeTB, HttpServletRequest request) {

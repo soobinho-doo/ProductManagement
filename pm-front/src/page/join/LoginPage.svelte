@@ -1,8 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import axios from "axios";
     import { link, push, replace } from 'svelte-spa-router';
-    import {isConnection} from "../../option/store";
     import { auth } from "../../option/auth";
 
     // 변수
@@ -43,7 +41,8 @@
             user_id: userId,
             user_pass:userPass
         }
-        await auth.login(data);
+        const loginResult:any = await auth.login(data);
+        errorMsg = loginResult;
     }
 
     // Option //

@@ -7,7 +7,6 @@ import { replace } from "svelte-spa-router";
 function setAuth () {
     let initDatas = {
         id : '',
-        user_email : '',
         role : '', 
         Authorization : '',
     }
@@ -38,7 +37,7 @@ function setAuth () {
             noti.info('로그인 완료', 2000);
 
         }catch(err){
-            alert("오류가 발생하였습니다. 다시 시도해 주세요")
+            return "아이디 또는 패스워드를 확인 해 주세요";
         }
     }
     const logout = async () => {

@@ -1,12 +1,11 @@
 <script lang="ts">
     import Header from "../../layout/Header.svelte";
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
-    import axios from "axios";
-    import { isConnection } from "../../option/store";
 
     // Tap Page
     import MyInfo from "./MyInfo.svelte";
     import MyDelete from "./MyDelete.svelte";
+    import { auth } from "../../option/auth";
 
     let menus = [
         { id: 1, name:"내 정보", component:MyInfo},
@@ -16,10 +15,7 @@
 
     // Method
     const logout = async () => {
-        await axios.get("/api/user/logout").then((res) => {
-            isConnection.set(false)
-            window.location.href="/"
-        }).catch((err) => {});
+        await auth.logout();
     }
 
 </script>

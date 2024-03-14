@@ -1,42 +1,39 @@
 <script lang="ts">
     import Header from "../../layout/Header.svelte";
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
-    import Modal from "../../component/Modal.svelte";
+    import BranchOfficeModifyComponent from "./BranchOfficeModifyComponent.svelte";
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
     import {branchOffice} from "../../option/branchOffice";
     import { noti } from "../../option/store";
 
     onMount(() => {
-        getBranchOfficeList(cp);
+        getBranchOfficeList();
     })
 
     // 리스트
     let branchOfficeDatas:any = [];
-    let cp:number; // 첫 페이지 번호
+    let cp:number = 1; // 첫 페이지 번호
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
     let ep:number; // 마지막 페이지
     let pageCount:number; // 페이지 개수
     let pageDatas:any = []; 
-    const getBranchOfficeList = async (cpNum:any) => {
-        if(!cpNum){
-            cpNum = 1;
-        }
+    const getBranchOfficeList = async () => {
         let data = {
-            cp: cpNum, 
-            keyword:keyword, 
+            cp: cp, 
+            keyword: keyword, 
         }
         
-        let branchOfficeInfo:any = await branchOffice.list(data);
+        let branchOfficeList:any = await branchOffice.list(data);
             
-        branchOfficeDatas = branchOfficeInfo.list;
-        rowCount = branchOfficeInfo.count;
-        cp = branchOfficeInfo.cp;
-        sp = branchOfficeInfo.sp;
-        ep = branchOfficeInfo.ep;
-        pageCount = branchOfficeInfo.pageCount;
+        branchOfficeDatas = branchOfficeList.list;
+        rowCount = branchOfficeList.count;
+        cp = branchOfficeList.cp;
+        sp = branchOfficeList.sp;
+        ep = branchOfficeList.ep;
+        pageCount = branchOfficeList.pageCount;
 
         pageDatas = [];
         for(let i=sp; i<=ep; i++){
@@ -48,47 +45,14 @@
 
     // 수정
     let isModal:boolean = false;
-    let sequence:number;
-    let branchOfficeName:string = "";
-    let barnchOfficeArea:string = "";
+    let branchOfficeSequence:number;
 
     // Get
     const getBranchOfficeButton = (sq:number) => {
         isModal = !isModal;
-        sequence = sq;
+        branchOfficeSequence = sq;
     }
-    const getBranchOffice = async () => {
-        let branchOfficeInfo = await branchOffice.info(sequence);
-
-        sequence = branchOfficeInfo.branch_office_sq;
-        branchOfficeName = branchOfficeInfo.branch_office_nm;
-        barnchOfficeArea = branchOfficeInfo.branch_office_area;
-    }
-
-    //
-    const modifyBranchOfficeButton = () =>{
-        if(!branchOfficeName){
-            alert("지점명을 입력 해 주세요")
-        }else if(!barnchOfficeArea){
-            alert("지점명이 위치한 지역을 입력 해 주세요")
-        }else{
-            modifyBranchOffice();
-        }
-    }
-
-    const modifyBranchOffice = async () => {
-        let data = {
-            branch_office_sq:sequence,
-            branch_office_nm:branchOfficeName,
-            branch_office_area:barnchOfficeArea, 
-        }
-        let branchOfficeModify = await branchOffice.modify(sequence, data);
-        if(branchOfficeModify === 1){
-            isModal = false;
-            getBranchOfficeList(cp);
-            noti.success("지점 수정 완료", 2000)
-        }
-    }
+    
 
     // 삭제
     const deleteBranchOfficeButton = (sequence:number) => {
@@ -102,7 +66,7 @@
     const deleteBranchOffice = async (sequence:number) => {
         let branchOfficeDel = await branchOffice.del(sequence);
         if(branchOfficeDel === 1){
-            getBranchOfficeList(cp);
+            getBranchOfficeList();
             noti.success("지점 삭제 완료", 2000)
         }
     }
@@ -165,8 +129,8 @@
                                 <span class="fs-1rem prtendard-regular">{data.branch_office_area}</span>
                             </div>
                             <div class="display-table-cell ta-c border-b1 padding-6">
-                                <button type="button" class="fs-1rem pretendard-regular button-update padding-4-8" on:click={()=>{getBranchOfficeButton(data.branch_office_sq)}}>수정</button>
-                                <button type="button" class="fs-1rem pretendard-regular button-delete padding-4-8" on:click={()=>{deleteBranchOfficeButton(data.branch_office_sq)}}>삭제</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-update border-radius-4 padding-4-8" on:click={()=>{getBranchOfficeButton(data.branch_office_sq)}}>수정</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-delete border-radius-4 padding-4-8" on:click={()=>{deleteBranchOfficeButton(data.branch_office_sq)}}>삭제</button>
                             </div>
                         </div>
                     {/each}
@@ -185,7 +149,7 @@
                 <div class="mt-30 display-flex align-items gap-5">
                     {#if cp !== 1}
                         <div>
-                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getBranchOfficeList(cp-1)}}>이전</button>
+                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp=cp-1; getBranchOfficeList()}}>이전</button>
                         </div>
                     {/if}
                     
@@ -194,14 +158,14 @@
                             {#if data === cp}
                                 <button type="button" class="fs-1rem pretendard-regular background-none button-update padding-4-10">{data}</button>    
                             {:else}
-                                <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getBranchOfficeList(data)}}>{data}</button>
+                                <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp=data; getBranchOfficeList()}}>{data}</button>
                             {/if}
                         {/each}
                     </div>
 
                     {#if cp !== pageCount }
                         <div>
-                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getBranchOfficeList(cp+1)}}>다음</button>
+                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp=cp+1; getBranchOfficeList()}}>다음</button>
                         </div>
                     {/if}
                 </div>   
@@ -216,37 +180,4 @@
 
 </div>
 
-<!-- 업데이트 모달 -->
-<Modal bind:isModal={isModal}>
-    <span slot="modal-title" class="fs-1rem pretendard-bold color-white">지점 수정</span>
-
-    <div slot="modal-content">
-        {#await getBranchOffice() then }
-        <!-- 지점명 -->
-        <div>
-            <span class="fs-16 pretendard-bold">지점명 <span class="color-tomato">*</span></span>
-            <div class="mt-10">
-                <input type="text" class="fs-16 pretendard-regular border-default border-radius-4 padding-8-12 width-100" bind:value={branchOfficeName} placeholder="지점명 입력"/>
-            </div>
-        </div>
-
-        <!-- 지점이 위치한 지역이름 -->
-        <div class="mt-20">
-            <span class="fs-16 pretendard-bold">지점이 위치한 지역이름 <span class="color-tomato">*</span></span>
-            <div class="mt-10">
-                <input type="text" class="fs-16 pretendard-regular border-default border-radius-4 padding-8-12 width-100" bind:value={barnchOfficeArea} placeholder="지점이 위치한 지역이름 입력"/>
-                <p class="mt-5 fs-14 pretendard-regular color-b1">Ex) 서울, 전주 등</p>
-            </div>
-        </div>
-
-        <!-- 수정 버튼 -->
-        <div class="mt-30 ta-c">
-            <button type="button" class="fs-16 pretendard-regular button-primary background-none border-default border-radius-4 padding-8-12" on:click={modifyBranchOfficeButton}>지점 수정</button>
-        </div>
-        {/await}
-    </div>
-</Modal>
-
-<style>
-
-</style>
+<BranchOfficeModifyComponent bind:isModal={isModal} bind:branchOfficeSequence={branchOfficeSequence} on:refresh={getBranchOfficeList}/>

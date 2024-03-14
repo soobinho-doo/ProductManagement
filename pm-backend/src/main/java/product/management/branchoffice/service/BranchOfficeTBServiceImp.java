@@ -24,20 +24,6 @@ public class BranchOfficeTBServiceImp implements BranchOfficeTBService {
 	private final JwtProvider jwtProvider;
 	
 	@Override
-	public List<BranchOfficeTB> findBranchOfficeTBListByUserId(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
-		String user_id = jwtProvider.getIdByToken(token);
-		
-		return branchOfficeTBMapper.selectBranchOfficeTBListByUserId(user_id);
-	}
-	
-	@Override
-	public BranchOfficeTB findBranchOfficeTBByBranchOfficeSq(Long branch_office_sq) {
-		
-		return branchOfficeTBMapper.selectBranchOfficeTBByBranchOfficeSq(branch_office_sq);
-	}
-	
-	@Override
 	public Map<String, Object> findBranchOfficeTBPaging(HashMap<String, String> map, HttpServletRequest request) {
 		int cp = Integer.parseInt(map.get("cp"));
 		int ps = 10;
@@ -80,6 +66,12 @@ public class BranchOfficeTBServiceImp implements BranchOfficeTBService {
 		
 		
 		return result;
+	}
+	
+	@Override
+	public BranchOfficeTB findBranchOfficeTBByBranchOfficeSq(Long branch_office_sq) {
+		
+		return branchOfficeTBMapper.selectBranchOfficeTBByBranchOfficeSq(branch_office_sq);
 	}
 
 	@Override

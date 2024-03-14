@@ -14,9 +14,6 @@ import product.management.branchoffice.dto.BranchOfficeTB;
 
 @Mapper
 public interface BranchOfficeTBMapper {
-
-	@Select("SELECT * FROM BRANCH_OFFICE_TB WHERE USER_ID = #{user_id}")
-	List<BranchOfficeTB> selectBranchOfficeTBListByUserId(String user_id);
 	
 	@Select("SELECT * FROM BRANCH_OFFICE_TB WHERE BRANCH_OFFICE_SQ = #{branch_office_sq}")
 	BranchOfficeTB selectBranchOfficeTBByBranchOfficeSq(Long branch_office_sq);
@@ -27,7 +24,6 @@ public interface BranchOfficeTBMapper {
 	
 	@Select("SELECT count(*) FROM BRANCH_OFFICE_TB WHERE 1=1 AND USER_ID = #{user_id} AND BRANCH_OFFICE_NM LIKE CONCAT('%',#{keyword},'%')")
 	int selectBranchOfficeTBRowByKeywordAndUserId(@Param("user_id") String user_id, @Param("keyword") String keyword);
-	
 	
 	
 	@Insert("INSERT INTO BRANCH_OFFICE_TB(BRANCH_OFFICE_SQ, USER_ID, BRANCH_OFFICE_NM, BRANCH_OFFICE_AREA, REG_DT, MOD_DT) "
