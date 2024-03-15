@@ -1,3 +1,9 @@
 2024-03-13
 
 - [ Front-svelte ] BranchOffice code Refactoring 
+
+2024-03-14
+- [Front, Backend] Product code Refactoring
+
+2024-03-15
+- [Front, Backend] Stock code Refactoring

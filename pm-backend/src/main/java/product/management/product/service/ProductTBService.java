@@ -13,8 +13,7 @@ import product.management.product.dto.ProductTBVO;
 public interface ProductTBService {
 	// Select
 	ProductTB findProductTBByProductSq(Long product_Sq);
-	List<ProductTB> findProductTBListByUserId(HttpServletRequest request);
-	List<ProductTB> findProductTBListByUserIdAndBranchOfficeNm(HttpServletRequest request, String branch_office_nm);
+
 	List<ProductTB> findExistsStockByUserId(HttpServletRequest request);
 	
 	Map<String, Object> findProductTBPaging(HashMap<String, String> map, HttpServletRequest request);

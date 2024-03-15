@@ -97,14 +97,6 @@ public class StockTBServiceImp implements StockTBService {
 		return stockTBMapper.selectStockTBByStockSq(stock_sq);
 	}
 	
-	
-	@Override
-	public String stockAuthentication(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
-		String user_id = jwtProvider.getIdByToken(token);
-		return user_id;
-	}
-	
 	@Override
 	public void findStockTBByExcel(String user_id, String stock_st, String start_dt, String end_dt, String keyword,
 			String branch_office_nm, HttpServletResponse response) throws IOException {

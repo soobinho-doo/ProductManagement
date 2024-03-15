@@ -10,7 +10,7 @@
             }else{
                 clearInterval(refreshInterval);
             }
-        }, 1000 * 60 * 29)
+        }, 1000 * 60 * 25)
     })
 
     // 로그인 시 Auth = USER

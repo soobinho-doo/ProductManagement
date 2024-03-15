@@ -1,15 +1,18 @@
 <script lang="ts">
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
     import Header from "../../layout/Header.svelte";
-    import Modal from "../../component/Modal.svelte";
-    import axios from "axios";
+    import StockModifyComponent from "./StockModifyComponent.svelte";
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
-    import { priceReplace } from "../../option/utill";
+    import { priceReplace, stockStDatas, stockStList } from "../../option/utill";
+    import { stock } from "../../option/stock";
+    import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
+    import { noti } from "../../option/store";
+    import { get } from "svelte/store";
+    import { auth } from "../../option/auth";
 
     onMount(() => {
-        getStockList(cp);
-        getBranchOfiice();
+        getStockList();
     })
 
     // 리스트 Get
@@ -25,151 +28,72 @@
     
     let startDt = oneMonthAgo.getFullYear() + '-'+oneMonth + '-'+oneDay;
     let endDt = year + '-' + month + '-' + date;
-    let cp:number; // 첫 페이지 번호
+    let cp:number = 1; // 첫 페이지 번호
     let rowCount:number = 0;
     let keyword:string = "";
-    let branchOfficeNm:string = "";
     let sp:number; // 시작 페이지
     let ep:number; // 마지막 페이지
     let pageCount:number; // 페이지 개수
     let pageDatas:any = []; 
-    const getStockList = async (cpNum:any) => {
-        if(!cpNum){
-            cpNum = 1;
-        }
+    const getStockList = async () => {
         let data = {
             stock_st:stockSt,
             start_dt:startDt,
             end_dt:endDt,
-            cp: cpNum, 
+            cp: cp, 
             keyword:keyword, 
-            branch_office_nm:branchOfficeNm,
+            branch_office_nm: branchOfficeName,
         }
-        await axios.post("/api/stock/paging", data).then((res) => {
-            //console.log(res.data);
-            stockDatas = res.data.list;
-            rowCount = res.data.count;
-            cp = res.data.cp;
-            sp = res.data.sp;
-            ep = res.data.ep;
-            pageCount = res.data.pageCount;
+        const stockList = await stock.list(data)
+           
+        stockDatas = stockList.list;
+        rowCount = stockList.count;
+        cp = stockList.cp;
+        sp = stockList.sp;
+        ep = stockList.ep;
+        pageCount = stockList.pageCount;
 
-            pageDatas = [];
-            for(let i=sp; i<=ep; i++){
-                pageDatas.push(i);
-                pageDatas = pageDatas;
-            }
-        }).catch((err) => {});
+        pageDatas = [];
+        for(let i=sp; i<=ep; i++){
+            pageDatas.push(i);
+            pageDatas = pageDatas;
+        }
     }
 
-    // Get BranchOfficeList
-    let branchOfficeDatas:any = [];
-    const getBranchOfiice = async () => {
-        await axios.get("/api/branch-office").then((res)=>{
-            branchOfficeDatas = res.data;
-        }).catch((err)=>{});
+    // 지점 선택
+    let branchOfficeSq:number = 0;
+    let branchOfficeName:string = "";
+    let isBranchOffice:boolean = false;
+    const isBranchOfficeModal = () => {
+        isBranchOffice = true;
     }
-
-    let stockStDatas:any = [
-        {name:"전체", value:""},
-        {name:"납품", value:"1"},
-        {name:"판매", value:"2"},
-        {name:"회수", value:"3"},
-    ]
 
     // 수정
     let isModal:boolean = false;
-    let sequence:number;
-
-    let selectProduct:any = [];
-    let selectProductSq:string = "";
-    let stockState:string = "1";
-    let stockNo:number = 0;
-    let stockDate:string = year + '-' + month + '-' + date;
-
-    // 납품, 판매, 회수 여부
-    let getStockDatas = [
-        {label:"납품", value:"1"},
-        {label:"판매", value:"2"},
-        {label:"회수", value:"3"},
-    ]
+    let sequence:number = 0;
 
     // Get
-    let getStockSq:number, getStockSt:string, getStockNo:string, getProductSq:string, getStockDt:string;
+    let getData = {
+        getStockSq: 0,
+        getStockSt: "",
+        getStockNo: "",
+        getProductSq: "",
+        getStockDt: "",
+    }
     const getStockButton = (sq:number, st:string, no:string, productSq:string, stockDt:string) => {
-        isModal = !isModal;
+        isModal = true;
         sequence = sq;
-        getStockSq = sq;
-        getStockSt = st;
-        getStockNo = no;
-        getProductSq = productSq;
-        getStockDt = stockDt;
-        //console.log("Before "+sq+" "+st+" "+no+" "+productSq+" "+stockDt+" ")
+
+        getData.getStockSq = sq;
+        getData.getStockSt = st;
+        getData.getStockNo = no;
+        getData.getProductSq = productSq;
+        getData.getStockDt = stockDt;
     }
     
-    // Get Stock
-    const getStock = async () => {
-        await axios.get("/api/stock/"+sequence).then((res)=>{
-            stockState = res.data.stock_st;
-            selectProductSq = res.data.product_sq;
-            stockNo = res.data.stock_no;
-            stockDate = res.data.stock_dt;
-        }).catch((err)=>{})
-    }
-
-    // Get ProductList
-    let productDatas:any = [];
-    const getProductList = async () => {
-        await axios.get("/api/product").then((res)=>{
-            productDatas = res.data;
-        }).catch((err)=>{});
-    }
-
-    const getProduct = async () => {
-        await axios.get("/api/product/"+selectProductSq).then((res)=>{
-            selectProduct = res.data;
-        }).catch((err)=>{});
-    }
-
-    // 수정 버튼
-    const stockModifyButton = () => {
-        //console.log(selectProduct.product_sq)
-        if(!selectProduct.product_sq){
-            alert("상품을 선택 해 주세요")
-        }else if(stockNo === 0){
-            alert("개수를 입력 해 주세요")
-        }else{
-            stockModify();
-            //alert("상품이 등록 되셨습니다");
-        }
-        
-    }
-
-    // 수정 RestApi
-    const stockModify = async () => {
-        let datas = {
-            before_stock_st : getStockSt,
-            before_product_sq : getProductSq,
-            before_stock_no : getStockNo,
-            before_stock_dt : getStockDt,
-            stock_sq : getStockSq,
-            stock_st : stockState,
-            product_sq : selectProductSq,
-            stock_no : stockNo, 
-            stock_dt : stockDate,
-        }
-        await axios.put("/api/stock", datas).then((res)=>{
-            isModal = false;
-            getStockList(cp);
-        }).catch((err)=>{});
-    } 
-
-
-
     // 삭제
     const deleteStockButton = (sq:string, st:string, no:string, productSq:string) => {
         if(confirm("삭제 하시겠습니까?\n삭제 후 데이터는 복구 되지 않습니다")){
-            alert("정상적으로 삭제되었습니다.");
             deleteStock(sq, st, no, productSq);
         }else{
             alert("취소 되었습니다");
@@ -177,22 +101,23 @@
     }
 
     const deleteStock = async (sq:string, st:string, no:string, productSq:string) => {
-        let datas = {
+        let data = {
             stock_sq: sq,
             stock_st: st,
             stock_no: no,
             product_sq: productSq,
         }
-        await axios.post("/api/stock/delete", datas).then((res)=>{
-            getStockList(cp);
-        }).catch((err)=>{});
+        const stockDel = await stock.del(data)
+        if(stockDel === 1){
+            getStockList()
+            noti.success("재고 리스트 삭제 완료", 2000)
+        }
     }
 
     // Excel Download
-    const stockListByExcel = async () => {
-        await axios.get("/api/stock/authentication").then((res)=>{
-            location.href="/api/stock/excel/download?user_id="+res.data+"&stock_st="+stockSt+"&start_dt="+startDt+"&end_dt="+endDt+"&keyword="+keyword+"&branch_office_nm="+branchOfficeNm
-        }).catch((err)=>{})
+    const downloadStockListToExcel = async () => {
+        const getId = get(auth).id;
+        location.href="/api/stock/excel/download?user_id="+getId+"&stock_st="+stockSt+"&start_dt="+startDt+"&end_dt="+endDt+"&keyword="+keyword+"&branch_office_nm="+branchOfficeName
     }
 </script>
 
@@ -222,29 +147,30 @@
                     <!--  -->
                     <div class="mt-5 display-flex align-items">
                         {#each stockStDatas as data}
-                            <button class="{stockSt === data.value ? 'button-update' : ''} fs-1rem pretendard-regular button-primary background-none border-none padding-6-12 when-480" on:click={()=>{stockSt = data.value; cp = 1; getStockList(cp);}}>{data.name}</button>
+                            <button class="{stockSt === data.value ? 'button-update' : ''} fs-1rem pretendard-regular button-primary background-none border-none padding-6-12 when-480" on:click={()=>{stockSt = data.value; cp = 1; getStockList();}}>{data.name}</button>
                         {/each}
                     </div>
                     <!--  -->
                     <div class="mt-5 display-flex align-items gap-10">
-                        <input type="date" class="fs-1rem pretendard-regular border-default border-radius-4 padding-6 when-480" bind:value={startDt} on:change={()=>{startDt = startDt; getStockList(cp);}}/>
+                        <input type="date" class="fs-1rem pretendard-regular border-default border-radius-4 padding-6 when-480" bind:value={startDt} on:change={()=>{startDt = startDt; cp = 1; getStockList();}}/>
                         <span class="fs-1rem pretendard-regular">~</span>
-                        <input type="date" class="fs-1rem pretendard-regular border-default border-radius-4 padding-6 when-480" bind:value={endDt} on:change={()=>{endDt = endDt; getStockList(cp);}}/>
+                        <input type="date" class="fs-1rem pretendard-regular border-default border-radius-4 padding-6 when-480" bind:value={endDt} on:change={()=>{endDt = endDt; cp = 1; getStockList();}}/>
                     </div>
                 </div>
                 <!--  -->
                 <div class="search-box">
                     <div class="mt-10">
-                        <select bind:value={branchOfficeNm} class="fs-1rem pretendard-regular border-default border-radius-4 padding-6-12 when-480" on:change={()=>{cp = 1; getStockList(cp);}}>
-                            <option class="fs-1rem pretendard-regular" value="">전체 지점</option>
-                            {#each branchOfficeDatas as data}
-                                <option class="fs-1rem pretendard-regular" value={data.branch_office_nm}>{data.branch_office_nm}</option>
-                            {/each}
-                        </select>
+                        <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-8-12 when-480" on:click={isBranchOfficeModal}>
+                            {#if branchOfficeName}
+                                {branchOfficeName}
+                            {:else}
+                                전체 지점
+                            {/if}
+                        </button>
                     </div>
                     <div class="mt-10 display-flex align-items">
-                        <input type="search" class="fs-16 pretendard-regular border-default border-radius-4 inp-default padding-6 width-100" bind:value={keyword} on:input={()=>{keyword = keyword; cp = 1; getStockList(cp);}} placeholder="상품 및 지점 명 입력"/>
-                        <button type="button" class="border-none background-none padding-4" on:click={()=>{getStockList(cp);}}>
+                        <input type="search" class="fs-16 pretendard-regular border-default border-radius-4 inp-default padding-8 width-100" bind:value={keyword} on:input={()=>{keyword = keyword; cp = 1; getStockList();}} placeholder="상품 및 지점 명 입력"/>
+                        <button type="button" class="border-none background-none padding-4" on:click={()=>{cp = 1; getStockList();}}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="18" height="18" viewBox="0 0 512 512">
                                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
                             </svg>
@@ -261,7 +187,7 @@
                 <div class="display-flex align-items gap-5">
                     <button type="button" class="fs-1rem pretendard-regular button-primary background-none border-default border-radius-4 padding-6-12" on:click={()=>{push("/stock/register")}}>재고 등록</button>
                     <div class="display-flex align-items gap-10">
-                        <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={stockListByExcel}>
+                        <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={downloadStockListToExcel}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="excel-svg" width="24" height="22" viewBox="0 0 48 48">
                                 <g fill="none" stroke="green" stroke-linecap="round" stroke-width="4">
                                     <path stroke-linejoin="round" d="M8 15V6a2 2 0 0 1 2-2h28a2 2 0 0 1 2 2v36a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-9"/>
@@ -361,8 +287,8 @@
                                 <span class="fs-1rem pretendard-regular">{data.stock_dt}</span> 
                             </div>
                             <div class="display-table-cell ta-c padding-12">
-                                <button type="button" class="fs-1rem pretendard-regular button-update padding-4-8" on:click={()=>{getStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq, data.stock_dt)}}>수정</button>
-                                <button type="button" class="fs-1rem pretendard-regular button-delete padding-4-8" on:click={()=>{deleteStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq)}}>삭제</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-update border-radius-4 padding-4-8" on:click={()=>{getStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq, data.stock_dt)}}>수정</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-delete border-radius-4 padding-4-8" on:click={()=>{deleteStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq)}}>삭제</button>
                             </div>
                         </div>                    
                     {/each}
@@ -429,8 +355,8 @@
                             </div>
                                 
                             <div class="mt-20 ta-r">
-                                <button type="button" class="fs-1rem pretendard-regular button-update padding-4-8" on:click={()=>{getStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq, data.stock_dt)}}>수정</button>
-                                <button type="button" class="fs-1rem pretendard-regular button-delete padding-4-8" on:click={()=>{deleteStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq)}}>삭제</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-update border-radius-4 padding-4-8" on:click={()=>{getStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq, data.stock_dt)}}>수정</button>
+                                <button type="button" class="fs-1rem pretendard-regular button-delete border-radius-4 padding-4-8" on:click={()=>{deleteStockButton(data.stock_sq, data.stock_st, data.stock_no, data.product_sq)}}>삭제</button>
                             </div>
                         </div>
                     {/each}
@@ -443,7 +369,7 @@
                 <div class="mt-30 display-flex align-items gap-5">
                     {#if cp !== 1}
                         <div>
-                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getStockList(cp-1)}}>이전</button>
+                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp = cp-1; getStockList()}}>이전</button>
                         </div>
                     {/if}
                     
@@ -452,14 +378,14 @@
                             {#if data === cp}
                                 <button type="button" class="fs-1rem pretendard-regular background-none button-update padding-4-10">{data}</button>    
                             {:else}
-                                <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getStockList(data)}}>{data}</button>
+                                <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp = data; getStockList()}}>{data}</button>
                             {/if}
                         {/each}
                     </div>
 
                     {#if cp !== pageCount }
                         <div>
-                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{getStockList(cp+1)}}>다음</button>
+                            <button type="button" class="fs-1rem pretendard-regular background-none border-default button-primary padding-4-10" on:click={()=>{cp = cp+1 ; getStockList()}}>다음</button>
                         </div>
                     {/if}
                 </div>   
@@ -475,128 +401,11 @@
 
 </div>
 
-<!-- Modal -->
-<Modal bind:isModal={isModal}>
-    <span slot="modal-title" class="fs-1rem pretendard-bold color-white">재고 수정</span>
+<!-- Stock Modify Modal -->
+<StockModifyComponent bind:isModal={isModal} bind:sequence={sequence} bind:getData={getData} on:refresh={()=>{cp=1; getStockList()}}/>
 
-    <div slot="modal-content">
-        {#await getStock() then }
-            <!-- 납품, 판매, 회수 여부 -->
-            <div>
-                <span class="fs-1rem pretendard-bold">납품 • 판매 • 회수 여부 <span class="color-tomato">*</span></span>
-                <div class="mt-10">
-                    {#each getStockDatas as data}
-                        <label class="fs-1rem pretendard-regular padding-right-12">
-                            <input type="radio" bind:group={stockState} value={data.value} />
-                            {data.label}
-                        </label>
-                    {/each}
-                </div>
-            </div>
-
-            <!-- 상품 선택 -->
-            <div class="mt-20">
-                <span class="fs-1rem pretendard-bold">상품 선택 <span class="color-tomato">*</span></span>
-                <div class="mt-10">
-                    <div>
-                        {#await getProductList() then }
-                            <select bind:value={selectProductSq} class="fs-1rem pretendard-regular border-default border-radius-4 padding-6-12" on:change={getProduct}>
-                                {#each productDatas as data}
-                                    <option class="fs-1rem pretendard-regular" value={data.product_sq}>{data.product_nm}</option>
-                                {/each}
-                            </select>
-                        {/await}
-                    </div>
-                    <div>
-                        
-                        {#await getProduct() then }
-                            <div class="mt-10 display-table">
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">지점</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        <span class="fs-1rem pretendard-regular">{selectProduct.branch_office_nm}</span>
-                                    </div>
-                                </div>
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">상품</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        <span class="fs-1rem pretendard-regular">{selectProduct.product_nm}</span>
-                                    </div>
-                                </div>
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">냉장 • 냉동 여부</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        {#if selectProduct.product_st === "1"}
-                                            <span class="fs-1rem pretendard-regular">기본 제품</span>
-                                        {:else if selectProduct.product_st === "2"}
-                                            <span class="fs-1rem pretendard-regular">냉장 제품</span>
-                                        {:else if selectProduct.product_st === "3"}
-                                            <span class="fs-1rem pretendard-regular">냉동 제품</span>
-                                        {/if}
-                                    </div>
-                                </div>
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">단가</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        <span class="fs-1rem pretendard-regular">{selectProduct.product_price}</span>
-                                    </div>
-                                </div>
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">단위</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        <span class="fs-1rem pretendard-regular">{selectProduct.product_weight} {selectProduct.product_weight_dt}</span>
-                                    </div>
-                                </div>
-                                <div class="display-table-row border-b1">
-                                    <div class="display-table-cell border-right-b1 padding-6">
-                                        <span class="fs-1rem pretendard-regular">수수료</span>
-                                    </div>
-                                    <div class="display-table-cell padding-6">
-                                        <span class="fs-1rem pretendard-regular">{selectProduct.product_commission} %</span>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            {/await}
-                        
-                        
-                    </div>
-                </div>
-            </div>
-
-            <!-- 개수 -->
-            <div class="mt-20">
-                <span class="fs-1rem pretendard-bold">개수 <span class="color-tomato">*</span></span>
-                <div class="mt-10">
-                    <input type="number" class="fs-1rem pretendard-regular border-default border-radius-4 padding-8-12" bind:value={stockNo}/>
-                </div>
-            </div>
-
-            <!-- 날짜 -->
-            <div class="mt-20">
-                <span class="fs-1rem pretendard-bold">납품, 판매, 회수 당일 날짜 <span class="color-tomato">*</span></span>
-                <div class="mt-10">
-                    <input type="date" class="fs-1rem pretendard-regular border-default border-radius-4 padding-8-12" bind:value={stockDate}/>
-                </div>
-            </div>
-
-            <!-- 수정 버튼 -->
-            <div class="mt-30 ta-c">
-                <button type="button" class="fs-1rem pretendard-regular button-primary background-none border-default border-radius-4 padding-8-12" on:click={stockModifyButton}>재고 수정</button>
-            </div>
-        {/await}
-    </div>
-</Modal>
+<!-- 지점 리스트 -->
+<BranchOfficeListComponent bind:isBranchOffice={isBranchOffice} bind:branchOfficeSq={branchOfficeSq} bind:branchOfficeName={branchOfficeName} on:refresh={()=>{cp=1; getStockList()}}/>
 
 <style>
     .search-box {display: flex; align-items: center; gap: 10px;}

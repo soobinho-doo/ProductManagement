@@ -93,7 +93,7 @@
         <div class="mt-20 padding-12 box-shadow-primary background-color-white">
             <div class="display-flex align-items justify-content-between">
                 <div>
-                    <p class="fs-1rem pretendard-regular">등록 지점 {rowCount}</p>
+                    <p class="fs-1rem pretendard-bold">등록 지점 {rowCount}</p>
                 </div>
                 <!--  -->
                 <div class="display-flex align-items">

@@ -43,22 +43,6 @@ public class ProductTBServiceImp implements ProductTBService {
 	}
 	
 	@Override
-	public List<ProductTB> findProductTBListByUserId(HttpServletRequest request) {
-		String token = request.getHeader("Authorization");
-		String user_id = jwtProvider.getIdByToken(token);
-		
-		return productTBMapper.selectProductTBListByUserId(user_id);
-	}
-	
-	@Override
-	public List<ProductTB> findProductTBListByUserIdAndBranchOfficeNm(HttpServletRequest request, String branch_office_nm) {
-		String token = request.getHeader("Authorization");
-		String user_id = jwtProvider.getIdByToken(token);
-		
-		return productTBMapper.selectProductTBListByUserIdAndBranchOfficeNm(user_id, branch_office_nm);
-	}
-	
-	@Override
 	public List<ProductTB> findExistsStockByUserId(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		String user_id = jwtProvider.getIdByToken(token);

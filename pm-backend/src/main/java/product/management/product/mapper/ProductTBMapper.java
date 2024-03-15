@@ -33,23 +33,6 @@ public interface ProductTBMapper {
 	int selectProductRowByKeywordAndUserId(@Param("user_id") String user_id, @Param("branch_office_nm") String branch_office_nm, @Param("keyword")  String keyword);
 	// End Paging
 	
-	// 유저가 가지고 있는 상품 리스트
-	@Select("SELECT b.PRODUCT_SQ, b.PRODUCT_NM, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
-			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
-			+ "WHERE 1=1 "
-			+ "AND b.USER_ID = #{user_id} "
-			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC")
-	List<ProductTB> selectProductTBListByUserId(String user_id);
-	
-	// 유저가 가지고 있는 지점의 상품 리스트
-	@Select("SELECT b.PRODUCT_SQ, b.PRODUCT_NM, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
-			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
-			+ "WHERE 1=1 "
-			+ "AND b.USER_ID = #{user_id} "
-			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
-			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC")
-	List<ProductTB> selectProductTBListByUserIdAndBranchOfficeNm(@Param("user_id") String user_id, @Param("branch_office_nm") String branch_office_nm);
-
 	// 유저의 재고가 있는 상품들 For Dashboard
 	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_NM, b.PRODUCT_PRICE, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
 			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "

@@ -32,6 +32,7 @@ public class ProductTBController {
 
 	private final ProductTBService productTBService;
 	
+	// 상세 정보
 	@GetMapping("/product/{product_sq}")
 	public ResponseEntity<ProductTB> findProductTBByProductSq(@PathVariable(value="product_sq") Long product_Sq) {
 		ProductTB productTB = productTBService.findProductTBByProductSq(product_Sq);
@@ -39,20 +40,7 @@ public class ProductTBController {
 		return ResponseEntity.ok(productTB);
 	}
 	
-	@GetMapping("/product")
-	public ResponseEntity<List<ProductTB>> findProductTBListByUserId(HttpServletRequest request) {
-		List<ProductTB> productTBList = productTBService.findProductTBListByUserId(request);
-		
-		return ResponseEntity.ok(productTBList);
-	}
-	
-	@GetMapping("/product/list/{branch_office_nm}")
-	public ResponseEntity<List<ProductTB>> findProductTBListByUserIdAndBranchOfficeNm(HttpServletRequest request, @PathVariable(value="branch_office_nm") String branch_office_nm) {
-		List<ProductTB> productTBList = productTBService.findProductTBListByUserIdAndBranchOfficeNm(request, branch_office_nm);
-		
-		return ResponseEntity.ok(productTBList);
-	}
-	
+	// 상품 재고 리스트 
 	@GetMapping("/product/dashboard")
 	public ResponseEntity<List<ProductTB>> findHasStockByUserId(HttpServletRequest request) {
 		List<ProductTB> productTBList = productTBService.findExistsStockByUserId(request);
@@ -60,7 +48,7 @@ public class ProductTBController {
 		return ResponseEntity.ok(productTBList);
 	}
 	
-	
+	// 리스트 페이징
 	@PostMapping("/product/paging")
 	public ResponseEntity<Map<String, Object>> findProductTBPaging(@RequestBody  HashMap<String, String> map, HttpServletRequest request) {
 		Map<String, Object> result = productTBService.findProductTBPaging(map, request);
@@ -68,12 +56,13 @@ public class ProductTBController {
 		return ResponseEntity.ok(result);
 	}
 	
-	
+	// 엑셀 다운
 	@GetMapping("/product/excel/download")
 	public void findStockTBByExcel(@RequestParam(value="user_id") String user_id, @RequestParam(value="keyword") String keyword,@RequestParam(value="branch_office_nm") String branch_office_nm, HttpServletResponse response) throws IOException {
 		productTBService.findProductTBListByExcel(user_id, keyword, branch_office_nm, response);
 	}
 	
+	// 등록
 	@PostMapping("/product")
 	public ResponseEntity<Integer> inputProductTB(@RequestBody ProductTB productTB, HttpServletRequest request) {
 		int result = productTBService.inputProductTB(productTB, request);
@@ -81,6 +70,7 @@ public class ProductTBController {
 		return ResponseEntity.ok(result);
 	}
 	
+	// 수정
 	@PatchMapping("/product/{product_sq}")
 	public ResponseEntity<Integer> modifyProductTB(@RequestBody ProductTB productTB, @PathVariable(value="product_sq") Long product_sq) {
 		int result = productTBService.modifyProductTB(productTB, product_sq);
@@ -88,6 +78,7 @@ public class ProductTBController {
 		return ResponseEntity.ok(result);
 	}
 	
+	// 삭제
 	@DeleteMapping("/product/{product_sq}")
 	public ResponseEntity<Integer> deleteProductTBByProductSq(@PathVariable(value="product_sq") Long product_sq) {
 		int result = productTBService.deleteProductTBByProductSq(product_sq);

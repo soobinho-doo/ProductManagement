@@ -1,13 +1,15 @@
 <script lang="ts">
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
     import Header from "../../layout/Header.svelte";
-    import axios from "axios";
     import { onMount } from "svelte";
-    import { priceReplace } from "../../option/utill";
+    import { priceReplace, stockStDatas } from "../../option/utill";
+    import { get } from "svelte/store";
+    import { auth } from "../../option/auth";
+    import { postApi } from "../../option/api";
+    import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
 
     onMount(() => {
         getStockBackupList(cp);
-        getBranchOfiice();
     })
 
     // 리스트 Get
@@ -25,7 +27,6 @@
     let cp:number; // 첫 페이지 번호
     let rowCount:number = 0;
     let keyword:string = "";
-    let branchOfficeNm:string = "";
     let sp:number; // 시작 페이지
     let ep:number; // 마지막 페이지
     let pageCount:number; // 페이지 개수
@@ -40,39 +41,43 @@
             end_dt:endDt,
             cp: cpNum, 
             keyword:keyword,
-            branch_office_nm:branchOfficeNm,
+            branch_office_nm:branchOfficeName,
         }
-        await axios.post("/api/stock-backup/paging", data).then((res) => {
-            //console.log(res.data);
-            stockDatas = res.data.list;
-            rowCount = res.data.count;
-            cp = res.data.cp;
-            sp = res.data.sp;
-            ep = res.data.ep;
-            pageCount = res.data.pageCount;
+        
+        const accessToken = get(auth).Authorization;
+        try{
+            const options = {
+                path:'/api/stock-backup/paging',
+                data: data,
+                accessToken : accessToken,
+            }
+            const stockBackupList = await postApi(options)
+            stockDatas = stockBackupList.list;
+            rowCount = stockBackupList.count;
+            cp = stockBackupList.cp;
+            sp = stockBackupList.sp;
+            ep = stockBackupList.ep;
+            pageCount = stockBackupList.pageCount;
 
             pageDatas = [];
             for(let i=sp; i<=ep; i++){
                 pageDatas.push(i);
                 pageDatas = pageDatas;
             }
-        }).catch((err) => {});
+            
+        }catch(err){
+            throw err
+        }
     }
 
-    // Get BranchOfficeList
-    let branchOfficeDatas:any = [];
-    const getBranchOfiice = async () => {
-        await axios.get("/api/branch-office").then((res)=>{
-            branchOfficeDatas = res.data;
-        }).catch((err)=>{});
+    // 지점 선택
+    let branchOfficeSq:number = 0;
+    let branchOfficeName:string = "";
+    let isBranchOffice:boolean = false;
+    const isBranchOfficeModal = () => {
+        isBranchOffice = true;
     }
 
-    let stockStDatas:any = [
-        {name:"전체", value:""},
-        {name:"납품", value:"1"},
-        {name:"판매", value:"2"},
-        {name:"회수", value:"3"},
-    ]
 
 </script>
 
@@ -114,15 +119,16 @@
             <!--  -->
             <div class="search-box">
                 <div class="mt-10">
-                    <select bind:value={branchOfficeNm} class="fs-1rem pretendard-regular border-default border-radius-4 padding-6-12 when-480" on:change={()=>{cp = 1; getStockBackupList(cp);}}>
-                        <option class="fs-1rem pretendard-regular" value="">전체 지점</option>
-                        {#each branchOfficeDatas as data}
-                            <option class="fs-1rem pretendard-regular" value={data.branch_office_nm}>{data.branch_office_nm}</option>
-                        {/each}
-                    </select>
+                    <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-8-12 when-480" on:click={isBranchOfficeModal}>
+                        {#if branchOfficeName}
+                            {branchOfficeName}
+                        {:else}
+                            전체 지점
+                        {/if}
+                    </button>
                 </div>
                 <div class="mt-10 display-flex align-items">
-                    <input type="search" class="fs-16 pretendard-regular border-default border-radius-4 inp-default padding-6 width-100" bind:value={keyword} on:input={()=>{keyword = keyword; cp = 1; getStockBackupList(cp);}} placeholder="상품 명 입력"/>
+                    <input type="search" class="fs-16 pretendard-regular border-default border-radius-4 inp-default padding-8 width-100" bind:value={keyword} on:input={()=>{keyword = keyword; cp = 1; getStockBackupList(cp);}} placeholder="상품 명 입력"/>
                     <button type="button" class="border-none background-none padding-4" on:click={()=>{getStockBackupList(cp);}}>
                         <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="18" height="18" viewBox="0 0 512 512">
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
@@ -258,6 +264,9 @@
     </div>
 
 </div>
+
+<!-- 지점 리스트 -->
+<BranchOfficeListComponent bind:isBranchOffice={isBranchOffice} bind:branchOfficeSq={branchOfficeSq} bind:branchOfficeName={branchOfficeName} on:refresh={()=>{getStockBackupList(1)}}/>
 
 <style>
     .search-box {display: flex; align-items: center; gap: 10px;}

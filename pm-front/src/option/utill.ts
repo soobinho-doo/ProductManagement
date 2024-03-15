@@ -31,3 +31,17 @@ export let keepDatas = [
 export let weightDatas = [
     "mg", "g", "kg", "t", "ml", "l", "통", "팩", "봉지", "반통", "개"
 ]
+
+// 납품, 판매, 회수 여부
+export let stockStList = [
+    {label:"납품", value:"1"},
+    {label:"판매", value:"2"},
+    {label:"회수", value:"3"},
+]
+
+export let stockStDatas:any = [
+    {name:"전체", value:""},
+    {name:"납품", value:"1"},
+    {name:"판매", value:"2"},
+    {name:"회수", value:"3"},
+]

@@ -21,6 +21,5 @@ public interface StockTBService {
 	int modifyStockTB(StockTBUpdateVO stockTBUpdateVO);
 	int deleteStockTB(StockTBJoinVO stockTBJoinVO);
 	
-	String stockAuthentication(HttpServletRequest request);
 	void findStockTBByExcel(String user_id, String stock_st, String start_dt, String end_dt, String keyword, String branch_office_nm, HttpServletResponse response) throws IOException;
 }

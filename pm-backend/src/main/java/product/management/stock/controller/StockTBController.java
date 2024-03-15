@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,13 +44,6 @@ public class StockTBController {
 		return ResponseEntity.ok(stockTB);
 	}
 	
-	// For Excel ====
-	@GetMapping("/stock/authentication")
-	public ResponseEntity<String> stockAuthentication(HttpServletRequest request) {
-		String user_id = stockTBService.stockAuthentication(request);
-		return ResponseEntity.ok(user_id);
-	}
-	
 	@GetMapping("/stock/excel/download")
 	public void findStockTBByExcel(@RequestParam(value="user_id") String user_id, @RequestParam(value="stock_st") String stock_st, @RequestParam(value="start_dt") String start_dt, @RequestParam(value="end_dt") String end_dt,@RequestParam(value="keyword") String keyword,@RequestParam(value="branch_office_nm") String branch_office_nm, HttpServletResponse response) throws IOException {
 		stockTBService.findStockTBByExcel(user_id, stock_st, start_dt, end_dt, keyword, branch_office_nm, response);
@@ -63,7 +57,7 @@ public class StockTBController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@PutMapping("/stock")
+	@PatchMapping("/stock")
 	public ResponseEntity<Integer> inputStockTB(@RequestBody StockTBUpdateVO stockTBUpdateVO) {
 		int result = stockTBService.modifyStockTB(stockTBUpdateVO);
 		
