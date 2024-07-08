@@ -47,6 +47,7 @@
         branchOfficeSq = sq;
         branchOfficeName = name;
         dispatch("refresh")
+        cp = 1;
     }
 </script>
 

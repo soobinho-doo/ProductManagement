@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { flip } from "svelte/animate";
     import { fly } from "svelte/transition";
     import { noti } from "../option/store";
     export let themes:any = {
@@ -15,7 +14,6 @@
 <div class="noti">
     {#each $noti as notification (notification.id)}
         <div
-            animate:flip
             class="toast padding-12-16 border-radius-4"
             style="background: {themes[notification.type]};"
             transition:fly={{ y: 30 }}
@@ -28,17 +26,16 @@
 <style>
     .noti {
         position: fixed;
-        bottom: 100px;
         left: 0;
         right: 0;
+        bottom: 10rem;
         margin: 0 auto;
         padding: 0;
         z-index: 9999;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: flex-end;
         align-items: center;
-        pointer-events: none;
     }
 
     .toast {

@@ -15,7 +15,12 @@ export const mathCeil = (price:number) => {
 
 // 숫자만 입력 가능
 export const onlyNumber = (value:string) => {
-    return value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    return value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');
+}
+
+// 글자 안돼 
+export const notOnlyLetter = (value:string) => {
+    return value.replace(/[ㄱ-ㅎ|가-힣|a-z|A-Z]/g, '').replace(/(\..*)\./g, '$1');
 }
 
 // 상품 관련

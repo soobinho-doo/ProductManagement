@@ -7,7 +7,7 @@ import { replace } from "svelte-spa-router";
 //
 function setAccount() {
     const info = async () => {
-        const email = get(auth).user_email;
+        const id = get(auth).id;
         const accessToken = get(auth).Authorization;
 
         try{
@@ -55,5 +55,4 @@ function setAccount() {
 }
 
 // Export 
-export const account = setAccount(); 
-export const testing = writable(false);
+export const account = setAccount();

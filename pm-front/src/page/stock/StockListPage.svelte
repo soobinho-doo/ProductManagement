@@ -4,7 +4,7 @@
     import StockModifyComponent from "./StockModifyComponent.svelte";
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
-    import { priceReplace, stockStDatas, stockStList } from "../../option/utill";
+    import { mathRound, priceReplace, stockStDatas, stockStList } from "../../option/utill";
     import { stock } from "../../option/stock";
     import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
     import { noti } from "../../option/store";
@@ -35,6 +35,22 @@
     let ep:number; // 마지막 페이지
     let pageCount:number; // 페이지 개수
     let pageDatas:any = []; 
+    
+    let dashDatas:any = [];
+    let deliveryQuantity:number = 0;
+    let deliveryPrice:number = 0;
+    let deliveryPriceCommission:number = 0;
+
+    let salesQuantity:number = 0;
+    let salesPrice:number = 0;
+    let salesPriceCommission:number = 0;
+    
+    let returnQuantity:number = 0;
+    let returnPrice:number = 0;
+    let returnPriceCommission:number = 0;
+
+    let priceQuantity:number;
+
     const getStockList = async () => {
         let data = {
             stock_st:stockSt,
@@ -47,6 +63,7 @@
         const stockList = await stock.list(data)
            
         stockDatas = stockList.list;
+        dashDatas = stockList.listAll;
         rowCount = stockList.count;
         cp = stockList.cp;
         sp = stockList.sp;
@@ -57,6 +74,33 @@
         for(let i=sp; i<=ep; i++){
             pageDatas.push(i);
             pageDatas = pageDatas;
+        }
+
+        deliveryQuantity = 0;
+        deliveryPrice = 0;
+        deliveryPriceCommission = 0;
+        salesQuantity = 0;
+        salesPrice = 0;
+        salesPriceCommission = 0;
+        returnQuantity = 0;
+        returnPrice = 0;
+        returnPriceCommission = 0;
+        for(let data of dashDatas) {
+            if(data.stock_st === "1"){
+                deliveryQuantity += data.stock_no;
+                deliveryPrice += data.stock_no * data.product_price;
+                deliveryPriceCommission += (data.product_price * data.stock_no) - (((data.product_price * data.stock_no) * data.product_commission)/100)
+            }
+            if(data.stock_st === "2"){
+                salesQuantity += data.stock_no;
+                salesPrice += data.stock_no * data.product_price;
+                salesPriceCommission += (data.product_price * data.stock_no) - (((data.product_price * data.stock_no) * data.product_commission)/100)
+            }
+            if(data.stock_st === "3"){
+                returnQuantity += data.stock_no;
+                returnPrice += data.stock_no * data.product_price;
+                returnPriceCommission += (data.product_price * data.stock_no) - (((data.product_price * data.stock_no) * data.product_commission)/100)
+            }
         }
     }
 
@@ -177,7 +221,6 @@
                         </button>
                     </div>
                 </div>
-                
             </div>
             
             
@@ -201,9 +244,86 @@
                 </div>
             </div>
 
+            <!-- 납, 판, 회 총 개수와 금액 -->
+            <div class="mt-10 display-grid grid-template-3 gap-10">
+                <div class="display-table border-default border-radius-4" style="background-color: #c6dfec;">
+                    <div class="display-table-row border-bottom-b1">
+                        <div class="display-table-cell ta-c  padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 납품 수</span>
+                        </div>
+                        <div class="display-table-cell ta-c  padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 납품 판매금액</span>
+                        </div>
+                        <div class="display-table-cell ta-c  padding-2 ">
+                            <span class="fs-1rem pretendard-regular width-100">총 납품 수익금액</span>
+                        </div>
+                    </div>
+                    <div class="display-table-row">
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{deliveryQuantity}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(deliveryPrice)}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(mathRound(deliveryPriceCommission))}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="display-table border-default border-radius-4" style="background-color: #ffb6a9;">
+                    <div class="display-table-row border-bottom-b1">
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 판매 수</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 판매 판매금액</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 판매 수익금액</span>
+                        </div>
+                    </div>
+                    <div class="display-table-row">
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{salesQuantity}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(salesPrice)}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(mathRound(salesPriceCommission))}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="display-table border-default border-radius-4" style="background-color: #caffca;">
+                    <div class="display-table-row border-bottom-b1">
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 회수 수</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 회수 판매금액</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">총 회수 수익금액</span>
+                        </div>
+                    </div>
+                    <div class="display-table-row">
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{returnQuantity}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(returnPrice)}</span>
+                        </div>
+                        <div class="display-table-cell ta-c padding-2">
+                            <span class="fs-1rem pretendard-regular width-100">{priceReplace(mathRound(returnPriceCommission))}</span>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+
             <!-- Window Content -->
             <div class="mt-10 display-table width-100 when-window">
-                <div class="display-table-row border-b1 background-color-custom-orange">
+                <div class="display-table-row border-b1 background-color-custom-orange text-white">
                     <div class="display-table-cell ta-c padding-12">
                         <span class="fs-1rem pretendard-bold">구분</span> 
                     </div>
@@ -245,12 +365,12 @@
                                     <span class="fs-1rem pretendard-bold">납품</span>
                                 </div>
                                     
-                                {:else if  data.stock_st === "2"}
+                            {:else if  data.stock_st === "2"}
                                 <div class="display-table-cell ta-c padding-12" style="background-color: #ffb6a9;">
                                     <span class="fs-1rem pretendard-bold">판매</span>
                                 </div>
                                     
-                                {:else if  data.stock_st === "3"}
+                            {:else if  data.stock_st === "3"}
                                 <div class="display-table-cell ta-c padding-12" style="background-color: #caffca;">
                                     <span class="fs-1rem pretendard-bold">회수</span>
                                 </div>

@@ -1,6 +1,5 @@
 package product.management.common.jwt;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -19,13 +18,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import product.management.common.AesUtil;
 import product.management.common.jwt.dto.TokenVO;
 import product.management.common.security.CustomUserDetailService;
 import product.management.user.dto.UserTB;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
@@ -51,7 +48,7 @@ public class JwtProvider {
         String refreshToken = Jwts.builder()
     		    .subject(aesUtil.aes256Encode(userTB.getUser_id()))
                 .issuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .expiration(Date.from(LocalDateTime.now().plusHours(24).atZone(ZoneId.systemDefault()).toInstant()))
+                .expiration(Date.from(LocalDateTime.now().plusDays(7).atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(setSecretKey())
                 .compact();
 

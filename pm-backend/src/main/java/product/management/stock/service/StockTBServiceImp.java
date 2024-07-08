@@ -61,11 +61,9 @@ public class StockTBServiceImp implements StockTBService {
 		
 		int rowCount = stockTBMapper.selectRowCount(user_id, stockSt, startDt, endDt, keyword, branchOfficeNm);
 		List<StockTBJoinVO> list = stockTBMapper.selectStockTBByPaging(user_id, stockSt, startDt, endDt, keyword, branchOfficeNm, calPage, ps);
-		//log.info("Stock rowCount = {}", rowCount);
-		//log.info("Stock List = {}", list);
+		List<StockTBJoinVO> listAll = stockTBMapper.selectStockTBByAllPaging(user_id, stockSt, startDt, endDt, keyword, branchOfficeNm);
 
 		int pageCount = (int)(Math.ceil((double)rowCount/ps));
-		//log.info("PageCount = {}", pageCount);
 		
 		int showPage = 5; // 한페이지에 보여줄 페이징 개수
 		int pageGrp = (int)Math.ceil((double)cp / showPage);
@@ -84,6 +82,7 @@ public class StockTBServiceImp implements StockTBService {
 					"count", rowCount,
 					"pageCount",pageCount,
 					"list", list,
+					"listAll",listAll,
 					"sp", sp,
 					"ep", ep
 				);
@@ -93,8 +92,13 @@ public class StockTBServiceImp implements StockTBService {
 	}
 	
 	@Override
-	public StockTB findStockTBByStockSq(Long stock_sq) {
-		return stockTBMapper.selectStockTBByStockSq(stock_sq);
+	public StockTB findStockTBByStockSq(Long stock_sq, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		String user_id = jwtProvider.getIdByToken(token);
+		
+		StockTB result = stockTBMapper.selectStockTBByStockSq(stock_sq, user_id);
+		
+		return result;
 	}
 	
 	@Override
@@ -259,7 +263,7 @@ public class StockTBServiceImp implements StockTBService {
 	
 	@Override
 	@Transactional
-	public int modifyStockTB(StockTBUpdateVO stockTBUpdateVO) {
+	public int modifyStockTB(StockTBUpdateVO stockTBUpdateVO, HttpServletRequest request) {
 		
 		String beforeStockSt = stockTBUpdateVO.getBefore_stock_st();
 		int beforeStockNo = stockTBUpdateVO.getBefore_stock_no();
@@ -293,7 +297,7 @@ public class StockTBServiceImp implements StockTBService {
 
 	@Override
 	@Transactional
-	public int deleteStockTB(StockTBJoinVO stockTBJoinVO) {
+	public int deleteStockTB(StockTBJoinVO stockTBJoinVO, HttpServletRequest request) {
 		//log.info("Stock-Delete = {}", stockTBJoinVO);
 		int stockNo = stockTBJoinVO.getStock_no();
 		

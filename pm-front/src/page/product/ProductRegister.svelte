@@ -3,7 +3,7 @@
     import Header from "../../layout/Header.svelte";
     import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
     import { product } from "../../option/product";
-    import { keepDatas, onlyNumber, weightDatas } from "../../option/utill";
+    import { keepDatas, onlyNumber, notOnlyLetter, weightDatas } from "../../option/utill";
 
 
     //
@@ -144,7 +144,7 @@
             <div class="mt-20">
                 <span class="fs-1rem pretendard-bold">상품 단위 <span class="color-tomato">*</span></span>
                 <div class="mt-10 display-flex align-items gap-5">
-                    <input type="text" class="mt-5 fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={productWeight} on:input={()=>{productWeight = onlyNumber(productWeight)}} placeholder="무게 입력"/>
+                    <input type="text" class="mt-5 fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={productWeight} on:input={()=>{productWeight = notOnlyLetter(productWeight)}} placeholder="무게 입력"/>
                     <div class="mt-5">
                         <select bind:value={productWeightDt} class="fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12">
                             <option class="fs-1rem pretendard-regular" value="">단위 선택</option>

@@ -1,14 +1,39 @@
-html {height: 100%;}
-body {height: 100%; margin: 0px; padding:0px; background:#fbfbff; color:#000;}
+:root {
+    /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+    line-height: 1.5;
+    --body-bg:#fbfbff;
+    --bg-white:#FFF;
+    --text-white:#FFF;
+    --text-black:#000;
+    --border-black-1:#000;
+    --border-black-2:#000;
+    --fill:#000;
+    --stroke:#000;
+}
+
+/* Dark */
+[data-theme="dark"] {
+    --body-bg:#2d2d2d;
+    --bg-white: #3D3B40;
+    --text-white:#000;
+    --text-black:#FFF;
+    --border-black-1:#FFF;
+    --border-black-2:#FFF;
+    --fill:#FFF;
+    --stroke:#FFF;
+}
+
+html {height: 100%; font-size:100%;}
+body {height: 100%; margin: 0px; padding:0px; background:var(--body-bg); color:var(--text-black);}
 div, input, button, select, textarea { box-sizing: border-box; }
-input {outline:none; margin: 0px; background:#FFF; color:#000;}
-select {background-color: #FFF; color: #000;}
+input {outline:none; margin: 0px; background-color:var(--bg-white); color:color:var(--text-black);}
+select {background-color: var(--bg-white); color: color:var(--text-black);}
 li {list-style: none;}
 ul {padding:0px; margin:0px;}
-a {text-decoration:none; color:#000; cursor: pointer;}
-p {margin:0px; color:#000;}
-span {color:#000;}
-button { cursor: pointer; color:#000; padding:0px;}
+a {text-decoration:none; color:color:var(--text-black); cursor: pointer;}
+p {margin:0px; color:color:var(--text-black);}
+span {color:color:var(--text-black);}
+button { cursor: pointer; color:color:var(--text-black); padding:0px;}
 img {max-width:100%;}
 #app {height:100%;}
 
@@ -25,7 +50,7 @@ img {max-width:100%;}
 .pretendard-regular {font-family: pretendardRegular;}
 
 /* Theme Change */
-.svg-color-change {fill:#000;}
+.svg-color-change {fill:var(--fill);}
 
 /* Font-Size */
 .fs-10 {font-size:10px;}
@@ -53,6 +78,7 @@ img {max-width:100%;}
 
 /* Color */
 .color-white {color:#FFF;}
+.text-white {color:#FFF;}
 .color-tomato {color:tomato;}
 .color-custom-blue {color: #2198d5;}
 .color-b1 {color: #b1b1b1;}
@@ -66,6 +92,8 @@ img {max-width:100%;}
 .padding-4-18 {padding:4px 18px;}
 .padding-6 {padding:6px;}
 .padding-6-12 {padding:6px 12px;}
+.padding-8 {padding:8px;}
+.padding-8-0 {padding: 8px 0px;}
 .padding-8-12 {padding: 8px 12px;}
 .padding-12 {padding:12px;}
 .padding-12-6 {padding:12px 6px;}
@@ -73,11 +101,14 @@ img {max-width:100%;}
 .padding-12-16 {padding: 12px 16px;}
 .padding-12-24 {padding:12px 24px;}
 
+.p-100-0 {padding:6.25rem 0rem;}
+
 .layout-padding {padding: 12px 12px 100px 12px;}
 
 /* Display */
 .display-flex {display: flex;}
 .display-grid {display: grid;}
+.grid-template-3 {grid-template-columns: repeat(auto-fill, minmax(30%, auto));}
 .display-table {display: table; border-collapse: collapse;}
 .display-table-row {display: table-row;}
 .display-table-cell {display: table-cell;}
@@ -134,9 +165,9 @@ img {max-width:100%;}
 
 /* Backgorund-Color */
 .background-none {background: none;}
-.background-color-white {background-color: #FFF;}
+.background-color-white {background-color: var(--bg-white);}
 .background-color-b1 {background-color: #b1b1b1;}
-.background-color-custom-orange {background-color: #e0e0e0;}
+.background-color-custom-orange {background-color: #597c9f;}
 
 /* Border */
 .border-none {border: none;}
@@ -197,21 +228,23 @@ img {max-width:100%;}
 
 @media all and (max-width: 768px){
     .layout-768 {width: 100%;}
-
+    html{
+        font-size:90%;
+    }
     .side-menu-bar:not(.side-menu-bar-end):not(.show) {
         margin-left: calc(var(--cal-side-menu-bar-width)*-1);
     }
     .side-menu-bar:not(.side-menu-bar-end)~* {
         --cul-side-menu-bar-start: 0!important;
     }
+
+    .grid-template-3 {grid-template-columns: repeat(auto-fill, minmax(100%, auto));}
 }
 
 @media all and (max-width: 480px){
-    .fs-14 {font-size: 12px;}
-    .fs-16 {font-size: 14px;}
-    .fs-18 {font-size: 16px;}
-    .fs-20 {font-size:18px;}
-
+    html{
+        font-size:80%;
+    }
     .mt-100 {margin-top: 50px;}
 
     .layout-480 {width: 100%; padding: 4px;}

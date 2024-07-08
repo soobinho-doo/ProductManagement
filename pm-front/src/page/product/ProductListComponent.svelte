@@ -5,6 +5,7 @@
     import { product } from "../../option/product";
     import LoadingPage from "../../loading/LoadingPage.svelte";
     import { link } from "svelte-spa-router";
+    import { priceReplace } from "../../option/utill";
 
     // 지점 선택
     let branchOfficeSq:number = 0;
@@ -12,6 +13,11 @@
     let isBranchOffice:boolean = false;
     const isBranchOfficeModal = () => {
         isBranchOffice = true;
+    }
+
+    const openBranshOffice = () => {
+        cp = 1;
+        isBranchOfficeModal();
     }
 
     export let selectProduct:any = [];
@@ -52,6 +58,9 @@
 
     // 지점 모달
     export let isProduct:boolean = false;
+    $:if(isProduct){
+        branchOfficeName = "";
+    }
 
     // 지점 초이스
     const dispatch = createEventDispatcher();
@@ -79,7 +88,7 @@
                     </div>
                 {:else}
                     <div>
-                        <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-8-12 when-480" on:click={isBranchOfficeModal}>
+                        <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-8-12 when-480" on:click={openBranshOffice}>
                             {#if branchOfficeName}
                                 {branchOfficeName}
                             {:else}
@@ -89,7 +98,14 @@
                     </div>
                     <div class="mt-10 display-grid">
                         {#each productDatas as data}
-                            <button type="button" class="fs-16 pretendard-regular button-hover background-none border-none border-bottom-b1 padding-8" on:click={()=>{productChoice(data)}}>{data.branch_office_nm} {data.product_nm} {data.product_price}</button>
+                            <button type="button" class="fs-1rem pretendard-regular button-hover background-none border-none border-bottom-b1 padding-8" on:click={()=>{productChoice(data)}}>{data.branch_office_nm} {data.product_nm} {priceReplace(data.product_price)}원 {data.product_weight}{data.product_weight_dt} 
+                            {#if data.product_st === "1"}
+                                <span class="fs-1rem pretendard-regular">기본</span>
+                            {:else if data.product_st === "2"}
+                                <span class="fs-1rem pretendard-regular">냉장</span>
+                            {:else if data.product_st === "3"}
+                                <span class="fs-1rem pretendard-regular">냉동</span>
+                            {/if}</button>
                         {/each}
                     </div>
                     <div class="mt-20 display-flex align-items gap-5">

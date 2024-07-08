@@ -1,6 +1,5 @@
 package product.management.SalesStatus.service;
 
-import java.util.HashMap;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;

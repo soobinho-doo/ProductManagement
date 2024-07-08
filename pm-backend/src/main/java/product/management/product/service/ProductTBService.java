@@ -25,9 +25,9 @@ public interface ProductTBService {
 	
 	
 	// Update
-	int modifyProductTB(ProductTB productTB, Long product_sq);
+	int modifyProductTB(ProductTB productTB, Long product_sq, HttpServletRequest request);
 	
 	
 	// Delete
-	int deleteProductTBByProductSq(Long product_sq);
+	int deleteProductTBByProductSq(Long product_sq, HttpServletRequest request);
 }

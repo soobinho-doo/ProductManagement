@@ -1,16 +1,14 @@
 <script lang="ts">
-    import axios from "axios";
     import { priceReplace } from "../../option/utill";
+    import { sales } from "../../option/sales"
 
     //
     let yearList:any = [];
     const getYearList = async () => {
-        await axios.get("/api/status/year").then((res)=>{
-            yearList = res.data;
-        }).catch((err)=>{});
+        yearList = await sales.yearStatus();
     }
-
     let promise = getYearList();
+
 </script>
 
 {#await promise}
@@ -25,7 +23,7 @@
             </div>
         {:else}
             {#each yearList as data}
-                <div class="mt-10 padding-6 border-b1 border-radius-4">
+                <div class="mt-10 padding-6-12 border-b1 border-radius-4">
                     <p class="fs-1rem pretendard-bold">{data.years} 년</p>
                     <div class="display-grid align-items justify-content-right">
                         <div class="display-flex align-items gap-10">

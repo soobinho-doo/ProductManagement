@@ -1,19 +1,17 @@
 <script lang="ts">
-    import axios from "axios";
     import { priceReplace } from "../../option/utill";
+    import { sales } from "../../option/sales"
 
     let sumPrice:number = 0; 
     let sumCommissionPrice:number = 0;
     let datas:any = []
     const getTodaySalesStatus = async () => {
-        await axios.get("/api/status/today").then((res)=>{
-            datas = res.data;
-            sumPrice = res.data.sum_price;
-            sumCommissionPrice = res.data.sum_commission_price
-        }).catch((err)=>{});
+        datas = await sales.todayStatus();
+        sumPrice = datas.sum_price;
+        sumCommissionPrice = datas.sum_commission_price
     }
-
     let promise = getTodaySalesStatus();
+
 </script>
 
 {#await promise}

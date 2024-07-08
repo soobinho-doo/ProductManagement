@@ -35,7 +35,7 @@ public interface SalesStatusMapper {
 			+ "WHERE a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ AND b.PRODUCT_SQ = c.PRODUCT_SQ "
 			+ "AND b.USER_ID = #{user_id} "
 			+ "AND c.STOCK_ST = 2 "
-			+ "AND DATE_FORMAT(c.STOCK_DT, '%Y') = #{years}"
+			+ "AND DATE_FORMAT(c.STOCK_DT, '%Y') = #{years} "
 			+ "GROUP BY DATE_FORMAT(c.STOCK_DT, '%m') ")
 	List<SalesStatusVO> selectMonthAverage(@Param("user_id") String user_id, @Param("years") String years);
 	
@@ -46,7 +46,7 @@ public interface SalesStatusMapper {
 			+ "AND b.USER_ID = #{user_id} "
 			+ "AND c.STOCK_ST = 2 "
 			+ "AND DATE_FORMAT(c.STOCK_DT, '%Y') = #{years} "
-			+ "AND DATE_FORMAT(c.STOCK_DT, '%m') = #{months}"
+			+ "AND DATE_FORMAT(c.STOCK_DT, '%m') = #{months} "
 			+ "GROUP BY DATE(c.STOCK_DT) "
 			+ "ORDER BY days DESC")
 	List<SalesStatusVO> selectDayAverage(@Param("user_id") String user_id, @Param("years") String years, @Param("months") String months);

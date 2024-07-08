@@ -20,7 +20,7 @@ public interface ProductTBMapper {
 	@Select("SELECT b.PRODUCT_SQ, b.PRODUCT_NM, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, "
 			+ "b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ  "
 			+ "WHERE b.USER_ID = #{user_id} "
-			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')"
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
 			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
 			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC LIMIT #{cp}, #{ps}")
 	List<ProductTB> selectProductTBListByProductTBVOAndUserId(@Param("user_id") String user_id, @Param("branch_office_nm") String branch_office_nm ,@Param("keyword") String keyword, @Param("cp") int cp, @Param("ps") int ps);
@@ -58,7 +58,7 @@ public interface ProductTBMapper {
 	@Select("SELECT b.PRODUCT_SQ, b.PRODUCT_NM, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, "
 			+ "b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ  "
 			+ "WHERE b.USER_ID = #{user_id} "
-			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')"
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
 			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
 			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC")
 	List<ProductTB> selectProductTBListByExcel(@Param("user_id") String user_id, @Param("branch_office_nm") String branch_office_nm ,@Param("keyword") String keyword);
@@ -70,8 +70,8 @@ public interface ProductTBMapper {
 	
 	// Update
 	@Update("UPDATE PRODUCT_TB SET BRANCH_OFFICE_SQ = #{branch_office_sq}, PRODUCT_NM = #{product_nm}, PRODUCT_ST = #{product_st}, PRODUCT_PRICE = #{product_price}, PRODUCT_COMMISSION = #{product_commission}, PRODUCT_WEIGHT = #{product_weight}, PRODUCT_WEIGHT_DT = #{product_weight_dt}, PRODUCT_MEASURE = #{product_measure}, MOD_DT = NOW() "
-			+ "WHERE PRODUCT_SQ = #{product_sq}")
-	int updateProductTB(ProductTB productTB);
+			+ "WHERE PRODUCT_SQ = #{product_sq} AND USER_ID = #{user_id}")
+	int updateProductTB(@Param("branch_office_sq") Long branch_office_sq, @Param("product_nm") String product_nm, @Param("product_st") String product_st, @Param("product_price") int product_price, @Param("product_commission") String product_commission, @Param("product_weight") String product_weight, @Param("product_weight_dt") String product_weight_dt, @Param("product_measure") String product_measure, @Param("product_sq") Long product_sq, @Param("user_id") String user_id);
 	
 	@Update("UPDATE PRODUCT_TB SET PRODUCT_STOCK = PRODUCT_STOCK + #{stock_no} WHERE PRODUCT_SQ = #{product_sq}")
 	int updateAddProductStock(@Param("stock_no") int stock_no, @Param("product_sq") Long product_sq);
@@ -90,7 +90,7 @@ public interface ProductTBMapper {
 	
 	
 	// Delete
-	@Delete("DELETE FROM PRODUCT_TB WHERE PRODUCT_SQ = #{product_sq}")
-	int deleteProductTBByProductSq(Long product_sq);
+	@Delete("DELETE FROM PRODUCT_TB WHERE PRODUCT_SQ = #{product_sq} AND USER_ID = #{user_id}")
+	int deleteProductTBByProductSq(@Param("product_sq") Long product_sq, @Param("user_id") String user_id);
 	
 }

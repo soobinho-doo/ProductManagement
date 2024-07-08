@@ -1,9 +1,8 @@
 import axios from "axios";
 
 const send = async ({method='', path='', data={}, accessToken=''} = {}) => {
-    const commonUrl = "http://localhost:5000";
-    //const commonUrl = "http://itemrecord.com";
-    //const commonUrl = "http://autowebmanager.com";
+    //const commonUrl = "http://localhost:5000";
+    const commonUrl = "http://itemrecord.com";
     const url = commonUrl + path;
     const headers = {
         "Access-Control-Allow-Origin": commonUrl,

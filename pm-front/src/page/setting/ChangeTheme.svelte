@@ -1,35 +1,15 @@
 <script lang="ts">
-    import { isTheme } from "../../option/store";
     
-    //let lightTheme = typeof window === 'undefined' || window.matchMedia('(prefers-color-scheme: light)').matches;
     let toggleSwitch = false;
-    if($isTheme){
-        toggleSwitch = false;
-    }else{
-        toggleSwitch = true;
-    }
-    const switchTheme = () => {
-        
-        //lightTheme = !lightTheme;
-        $isTheme = !$isTheme;
-        //console.log($isTheme);
-        
-        toggleSwitch = !$isTheme;
-        
-        let themeLink = document.head.querySelector<HTMLLinkElement>('#theme');
 
-        if (!themeLink) {
-            themeLink = document.createElement('link');
-            themeLink.rel = 'stylesheet';
-            themeLink.id = 'theme';
-            
-        }
-        themeLink.href = `/css/common${$isTheme ? '' : 'Dark'}.css`;
-        document.head.querySelector<HTMLLinkElement>('link[href$="/css/commonDark.css"]')?.insertAdjacentElement('afterend', themeLink);
-        
+    const switchTheme = () => {        
+        if (toggleSwitch) {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+        }        
     }
-    
-    
+      
 </script>
     
 <label class="display-flex align-items">

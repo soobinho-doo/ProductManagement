@@ -1,9 +1,5 @@
 import { writable, readable, derived } from "svelte/store";
 
-// 밝은, 다크 모드 
-export const isTheme = writable(true);
-
-
 // Toast 
 const createNotificationStore = () => {
     const _notifications = writable([]);

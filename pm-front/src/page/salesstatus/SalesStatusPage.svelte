@@ -47,7 +47,7 @@
             <!-- 메뉴들 -->
             <div class="display-flex align-items">
                 {#each menus as menu}
-                    <button type="button" class="{menuSelect === menu.id ? 'button-update' : ''} fs-16 pretendard-bold background-none border-none width-100 padding-12-16 button-primary" on:click={() => { menuSelect = menu.id }}>{menu.name}</button>   
+                    <button type="button" class="{menuSelect === menu.id ? 'button-update' : ''} fs-1rem pretendard-bold background-none border-none width-100 padding-12-16 button-primary" on:click={() => { menuSelect = menu.id }}>{menu.name}</button>   
                 {/each}
             </div>
 

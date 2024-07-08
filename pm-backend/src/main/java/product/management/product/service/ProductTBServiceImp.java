@@ -47,7 +47,9 @@ public class ProductTBServiceImp implements ProductTBService {
 		String token = request.getHeader("Authorization");
 		String user_id = jwtProvider.getIdByToken(token);
 		
-		return productTBMapper.selectExistsStockByUserId(user_id);
+		List<ProductTB> result = productTBMapper.selectExistsStockByUserId(user_id);
+		
+		return result;
 	}	
 	
 	@Override
@@ -242,23 +244,41 @@ public class ProductTBServiceImp implements ProductTBService {
 		String token = request.getHeader("Authorization");
 		String user_id = jwtProvider.getIdByToken(token);
 		productTB.setUser_id(user_id);
-		//log.info("# Insert Product_TB "+productTB);
-		return productTBMapper.insertProductTB(productTB);
+		
+		int result = productTBMapper.insertProductTB(productTB);
+		
+		return result;
 	}
 	
 	@Override
 	@Transactional
-	public int modifyProductTB(ProductTB productTB, Long product_sq) {
-		productTB.setProduct_sq(product_sq);
-		//log.info("# Modify = {}", productTB);
-		return productTBMapper.updateProductTB(productTB);
+	public int modifyProductTB(ProductTB productTB, Long product_sq, HttpServletRequest request) {
+		Long branch_office_sq = productTB.getBranch_office_sq();
+		String product_nm = productTB.getProduct_nm();
+		String product_st = productTB.getProduct_st();
+		int product_price = productTB.getProduct_price();
+		String product_commission = productTB.getProduct_commission();
+		String product_weight = productTB.getProduct_weight();
+		String product_weight_dt = productTB.getProduct_weight_dt();
+		String product_measure = productTB.getProduct_measure();
+		
+		String token = request.getHeader("Authorization");
+		String user_id = jwtProvider.getIdByToken(token);
+		
+		int result = productTBMapper.updateProductTB(branch_office_sq, product_nm, product_st, product_price, product_commission, product_weight, product_weight_dt, product_measure, product_sq, user_id);
+		
+		return result;
 	}
 
 	@Override
 	@Transactional
-	public int deleteProductTBByProductSq(Long product_sq) {
+	public int deleteProductTBByProductSq(Long product_sq, HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		String user_id = jwtProvider.getIdByToken(token);
 		
-		return productTBMapper.deleteProductTBByProductSq(product_sq);
+		int result = productTBMapper.deleteProductTBByProductSq(product_sq, user_id);
+		
+		return result; 
 	}
 
 }

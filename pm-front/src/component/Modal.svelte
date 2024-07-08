@@ -14,7 +14,7 @@
     <div class="backdrop" on:click={closeModal}>
     </div>
 
-    <div class="modal border-radius-4" transition:fade={{ delay: 50, duration: 150 }}>
+    <div class="modal border-radius-4" transition:fade={{ delay: 50, duration: 120 }}>
         <!-- 타이틀 -->
         <div class="display-flex align-items justify-content-between modal-title">
             <slot name="modal-title"></slot>

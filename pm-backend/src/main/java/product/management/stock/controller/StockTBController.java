@@ -38,8 +38,8 @@ public class StockTBController {
 	}
 	
 	@GetMapping("/stock/{stock_sq}")
-	public ResponseEntity<StockTB> findStockTBByStockSq(@PathVariable(value="stock_sq") Long stock_sq) {
-		StockTB stockTB = stockTBService.findStockTBByStockSq(stock_sq);
+	public ResponseEntity<StockTB> findStockTBByStockSq(@PathVariable(value="stock_sq") Long stock_sq, HttpServletRequest request) {
+		StockTB stockTB = stockTBService.findStockTBByStockSq(stock_sq, request);
 		
 		return ResponseEntity.ok(stockTB);
 	}
@@ -58,15 +58,15 @@ public class StockTBController {
 	}
 	
 	@PatchMapping("/stock")
-	public ResponseEntity<Integer> inputStockTB(@RequestBody StockTBUpdateVO stockTBUpdateVO) {
-		int result = stockTBService.modifyStockTB(stockTBUpdateVO);
+	public ResponseEntity<Integer> inputStockTB(@RequestBody StockTBUpdateVO stockTBUpdateVO, HttpServletRequest request) {
+		int result = stockTBService.modifyStockTB(stockTBUpdateVO, request);
 		
 		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping("/stock/delete")
-	public ResponseEntity<Integer> deleteStockTB(@RequestBody StockTBJoinVO stockTBJoinVO) {
-		int result = stockTBService.deleteStockTB(stockTBJoinVO);
+	public ResponseEntity<Integer> deleteStockTB(@RequestBody StockTBJoinVO stockTBJoinVO, HttpServletRequest request) {
+		int result = stockTBService.deleteStockTB(stockTBJoinVO, request);
 		
 		return ResponseEntity.ok(result);
 	}

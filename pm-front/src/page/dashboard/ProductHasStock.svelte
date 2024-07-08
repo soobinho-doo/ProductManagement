@@ -1,19 +1,16 @@
 <script lang="ts">
-    import axios from "axios";
     import { onMount } from "svelte";
     import { priceReplace } from "../../option/utill";
     import { push } from "svelte-spa-router";
+    import { dashBaord } from "../../option/dashboard";
 
-    onMount(()=>{
-        getProductHasStockList();
+    onMount( async ()=>{
+        stockList();
     })
 
     let prodcutHasStockList:any = [];
-
-    const getProductHasStockList = async () =>{
-        await axios.get("/api/product/dashboard").then((res)=>{
-            prodcutHasStockList = res.data;
-        }).catch((err)=>{});
+    const stockList = async () => {
+        prodcutHasStockList = await dashBaord.stockList();
     }
 
 </script>
@@ -22,7 +19,7 @@
     <div class="display-flex align-items justify-content-between">
         <span class="fs-18 pretendard-bold">현 재고 상품리스트</span>
         <button type="button" class="background-none border-none" on:click={()=>{push("/product/list")}}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/>
             </svg>
         </button>
@@ -31,11 +28,7 @@
     <div class="mt-10 list-box">
         {#if prodcutHasStockList.length === 0}
             <div>
-                <p class="fs-18 pretendard-regular display-flex align-items gap-5">재고
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="tomato" d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12z"/>
-                    </svg>
-                </p>
+                <p class="fs-18 pretendard-regular display-flex align-items gap-5">재고가 없습니다</p>
             </div>
         {:else}
             {#each prodcutHasStockList as data}

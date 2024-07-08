@@ -15,11 +15,11 @@ import product.management.stock.dto.StockTBUpdateVO;
 public interface StockTBService {
 	Map<String, Object> findStockTBPaging(HashMap<String, String> map, HttpServletRequest request);
 	
-	StockTB findStockTBByStockSq(Long stock_sq);
+	StockTB findStockTBByStockSq(Long stock_sq, HttpServletRequest request);
 	
 	int inputStockTB(StockTB stockTB, HttpServletRequest request);
-	int modifyStockTB(StockTBUpdateVO stockTBUpdateVO);
-	int deleteStockTB(StockTBJoinVO stockTBJoinVO);
+	int modifyStockTB(StockTBUpdateVO stockTBUpdateVO, HttpServletRequest request);
+	int deleteStockTB(StockTBJoinVO stockTBJoinVO, HttpServletRequest request);
 	
 	void findStockTBByExcel(String user_id, String stock_st, String start_dt, String end_dt, String keyword, String branch_office_nm, HttpServletResponse response) throws IOException;
 }

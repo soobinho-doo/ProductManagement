@@ -15,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 public class MainController {
 
 	private final UtilConfig utilConfig;
+	private final IpConfig ipConfig;
 	
 	@GetMapping("/")
 	public String mainPage(HttpServletRequest request, HttpServletResponse response) {
+		String ip = ipConfig.getIpAddress(request);
 		int remainingTime = utilConfig.remainingTime();
 		
 		Cookie guestCookie = null;
@@ -40,6 +42,11 @@ public class MainController {
 	        	newGuestCookie.setMaxAge(remainingTime);
             response.addCookie(newGuestCookie);
         }
+        
+        boolean badIp = ip.matches(".*222.239.104.*");
+        if(badIp){
+			return null;
+		}
 		
 		return "index.html";
 	}

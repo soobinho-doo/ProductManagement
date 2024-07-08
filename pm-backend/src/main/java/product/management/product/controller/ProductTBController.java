@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,11 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import product.management.product.dto.ProductTB;
 import product.management.product.service.ProductTBService;
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
@@ -72,16 +69,16 @@ public class ProductTBController {
 	
 	// 수정
 	@PatchMapping("/product/{product_sq}")
-	public ResponseEntity<Integer> modifyProductTB(@RequestBody ProductTB productTB, @PathVariable(value="product_sq") Long product_sq) {
-		int result = productTBService.modifyProductTB(productTB, product_sq);
+	public ResponseEntity<Integer> modifyProductTB(@RequestBody ProductTB productTB, @PathVariable(value="product_sq") Long product_sq, HttpServletRequest request) {
+		int result = productTBService.modifyProductTB(productTB, product_sq, request);
 		
 		return ResponseEntity.ok(result);
 	}
 	
 	// 삭제
 	@DeleteMapping("/product/{product_sq}")
-	public ResponseEntity<Integer> deleteProductTBByProductSq(@PathVariable(value="product_sq") Long product_sq) {
-		int result = productTBService.deleteProductTBByProductSq(product_sq);
+	public ResponseEntity<Integer> deleteProductTBByProductSq(@PathVariable(value="product_sq") Long product_sq, HttpServletRequest request) {
+		int result = productTBService.deleteProductTBByProductSq(product_sq, request);
 		
 		return ResponseEntity.ok(result);
 	}

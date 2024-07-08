@@ -1,15 +1,13 @@
 <script lang="ts">
-    import axios from "axios";
     import { priceReplace } from "../../option/utill";
+    import { sales } from "../../option/sales"
 
     //
-    let today = new Date();
-    let year = today.getFullYear();
+    let today:Date = new Date();
+    let year:number = today.getFullYear();
     let monthList:any = [];
     const getMonthList = async () => {
-        await axios.get("/api/status/month/"+year).then((res)=>{
-            monthList = res.data;
-        }).catch((err)=>{});
+        monthList = await sales.monthStatus(year);
     }
 
     let promise = getMonthList();
@@ -52,7 +50,7 @@
         {:else}
             <div class="mt-10">
                 {#each monthList as data}
-                    <div class="mt-10 padding-6 border-b1 border-radius-4">
+                    <div class="mt-10 padding-6-12 border-b1 border-radius-4">
                         <p class="fs-1rem pretendard-bold">{data.months} 월</p>
                         <div class="display-grid align-items justify-content-right">
                             <div class="display-flex align-items gap-10">

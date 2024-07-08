@@ -23,24 +23,34 @@ public interface StockTBMapper {
 			+ "AND b.PRODUCT_SQ = c.PRODUCT_SQ "
 			+ "AND c.USER_ID = #{user_id} "
 			+ "AND c.STOCK_ST LIKE CONCAT('%',#{stock_st},'%') "
-			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt}"
-			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%')"
-			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')"
+			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt} "
+			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
 			+ "ORDER BY c.STOCK_DT DESC, c.REG_DT DESC LIMIT #{cp}, #{ps}")
 	List<StockTBJoinVO> selectStockTBByPaging(@Param("user_id") String user_id, @Param("stock_st") String stock_st, @Param("start_dt") String start_dt, @Param("end_dt") String end_dt, @Param("keyword") String keyword, @Param("branch_office_nm") String branch_office_nm, @Param("cp") int cp, @Param("ps") int ps);
+	
+	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_SQ, b.PRODUCT_NM, b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, c.STOCK_SQ, c.STOCK_ST, c.STOCK_NO, c.STOCK_DT FROM BRANCH_OFFICE_TB a, PRODUCT_TB b, STOCK_TB c "
+			+ "WHERE a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
+			+ "AND b.PRODUCT_SQ = c.PRODUCT_SQ "
+			+ "AND c.USER_ID = #{user_id} "
+			+ "AND c.STOCK_ST LIKE CONCAT('%',#{stock_st},'%') "
+			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt} "
+			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')")
+	List<StockTBJoinVO> selectStockTBByAllPaging(@Param("user_id") String user_id, @Param("stock_st") String stock_st, @Param("start_dt") String start_dt, @Param("end_dt") String end_dt, @Param("keyword") String keyword, @Param("branch_office_nm") String branch_office_nm);
 	
 	@Select("SELECT count(*) FROM BRANCH_OFFICE_TB a, PRODUCT_TB b, STOCK_TB c "
 			+ "WHERE a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
 			+ "AND b.PRODUCT_SQ = c.PRODUCT_SQ "
 			+ "AND c.USER_ID = #{user_id} "
 			+ "AND c.STOCK_ST LIKE CONCAT('%',#{stock_st},'%') "
-			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt}"
-			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%')"
+			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt} "
+			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
 			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')")
 	int selectRowCount(@Param("user_id") String user_id, @Param("stock_st") String stock_st, @Param("start_dt") String start_dt, @Param("end_dt") String end_dt, @Param("keyword") String keyword, @Param("branch_office_nm") String branch_office_nm);
 	
-	@Select("SELECT * FROM STOCK_TB WHERE 1=1 AND STOCK_SQ = #{stock_sq}")
-	StockTB selectStockTBByStockSq(Long stock_sq);
+	@Select("SELECT * FROM STOCK_TB WHERE 1=1 AND STOCK_SQ = #{stock_sq} AND USER_ID = #{user_id}")
+	StockTB selectStockTBByStockSq(@Param("stock_sq") Long stock_sq, @Param("user_id") String user_id);
 	
 	// Excel
 	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_SQ, b.PRODUCT_NM, b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, c.STOCK_SQ, c.STOCK_ST, c.STOCK_NO, c.STOCK_DT FROM BRANCH_OFFICE_TB a, PRODUCT_TB b, STOCK_TB c "
@@ -48,9 +58,9 @@ public interface StockTBMapper {
 			+ "AND b.PRODUCT_SQ = c.PRODUCT_SQ "
 			+ "AND c.USER_ID = #{user_id} "
 			+ "AND c.STOCK_ST LIKE CONCAT('%',#{stock_st},'%') "
-			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt}"
-			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%')"
-			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%')"
+			+ "AND c.STOCK_DT BETWEEN #{start_dt} AND #{end_dt} "
+			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
 			+ "ORDER BY c.STOCK_DT DESC, c.REG_DT DESC")
 	List<StockTBJoinVO> selectStockTBByExcel(@Param("user_id") String user_id, @Param("stock_st") String stock_st, @Param("start_dt") String start_dt, @Param("end_dt") String end_dt, @Param("keyword") String keyword, @Param("branch_office_nm") String branch_office_nm);
 	
