@@ -9,6 +9,7 @@
     export let branchOfficeName:string = "";
 
     let cp:number = 1; // 첫 페이지 번호
+    let ps:number = 10;
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
@@ -19,6 +20,7 @@
     const getBranchOfficeList = async () => {
         let data = {
             cp: cp, 
+            ps: ps,
             keyword:keyword, 
         }
         let branchOfficeList:any = await branchOffice.list(data);
@@ -26,6 +28,7 @@
         branchOfficeDatas = branchOfficeList.list;
         rowCount = branchOfficeList.count;
         cp = branchOfficeList.cp;
+        ps = branchOfficeList.ps;
         sp = branchOfficeList.sp;
         ep = branchOfficeList.ep;
         pageCount = branchOfficeList.pageCount;

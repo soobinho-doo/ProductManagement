@@ -26,9 +26,8 @@ public class BranchOfficeTBServiceImp implements BranchOfficeTBService {
 	@Override
 	public Map<String, Object> findBranchOfficeTBPaging(HashMap<String, String> map, HttpServletRequest request) {
 		int cp = Integer.parseInt(map.get("cp"));
-		int ps = 10;
-		int calPage = 0;
-		calPage = (cp-1) * ps;
+		int ps = Integer.parseInt(map.get("ps"));
+		int calPage = (cp-1) * ps;
 		
 		String keyword = map.get("keyword");
 		
@@ -57,6 +56,7 @@ public class BranchOfficeTBServiceImp implements BranchOfficeTBService {
 		
 		Map<String, Object> result = Map.of(
 					"cp", cp,
+					"ps", ps,
 					"count", rowCount,
 					"pageCount",pageCount,
 					"list", list,

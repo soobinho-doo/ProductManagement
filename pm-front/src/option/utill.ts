@@ -50,3 +50,8 @@ export let stockStDatas:any = [
     {name:"판매", value:"2"},
     {name:"회수", value:"3"},
 ]
+
+// page size 
+export let pageSizeDatas:any = [
+    10, 20, 30, 50, 100
+]

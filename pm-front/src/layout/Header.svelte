@@ -39,7 +39,7 @@
 
 </script>
 
-<header class="display-flex align-items justify-content-between border-bottom-b1 background-color-white">
+<header class="height-50px display-flex align-items justify-content-between border-bottom-b1 background-color-white">
     <div class="padding-12">
         <a class="brand fs-18 pretendard-bold" href="/" use:link>Product Management</a>
         <button type="button" class="not-show border-none background-none" on:click={isSideHide}>
@@ -52,12 +52,12 @@
     <div class="display-flex align-items gap-20">
     
             <DropDown>
-                <div class="display-flex align-items gap-10 padding-12-16" slot="select-title">
+                <div class="display-flex align-items gap-5 padding-12-16" slot="select-title">
                     {#await getUserInfo() then }
-                        <span class="fs-14 pretendard-regular">{userName}</span>
+                        <span class="fs-14 pretendard-regular fw-b">{userName}</span>
                     {/await}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="24" height="24" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zM7.35 18.5C8.66 17.56 10.26 17 12 17s3.34.56 4.65 1.5c-1.31.94-2.91 1.5-4.65 1.5s-3.34-.56-4.65-1.5zm10.79-1.38a9.947 9.947 0 0 0-12.28 0A7.957 7.957 0 0 1 4 12c0-4.42 3.58-8 8-8s8 3.58 8 8c0 1.95-.7 3.73-1.86 5.12z"/><path fill="currentColor" d="M12 6c-1.93 0-3.5 1.57-3.5 3.5S10.07 13 12 13s3.5-1.57 3.5-3.5S13.93 6 12 6zm0 5c-.83 0-1.5-.67-1.5-1.5S11.17 8 12 8s1.5.67 1.5 1.5S12.83 11 12 11z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="28" height="28" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M5 18.235q1.35-1.325 3.138-2.088T12 15.385t3.863.762T19 18.235V5.615q0-.23-.192-.423T18.384 5H5.616q-.231 0-.424.192T5 5.616zm7-5.158q1.258 0 2.129-.871T15 10.077t-.871-2.129T12 7.077t-2.129.871T9 10.077t.871 2.129t2.129.871M5.616 20q-.691 0-1.153-.462T4 18.384V5.616q0-.691.463-1.153T5.616 4h12.769q.69 0 1.153.463T20 5.616v12.769q0 .69-.462 1.153T18.384 20zm.013-1H18.37q-1.446-1.36-3.064-1.988T12 16.385q-1.65 0-3.293.628T5.629 19M12 12.077q-.817 0-1.409-.591Q10 10.894 10 10.077t.591-1.409q.592-.591 1.409-.591t1.409.591Q14 9.26 14 10.077t-.591 1.409t-1.409.591m0-.46"/>
                     </svg>
                 </div>
                 

@@ -55,7 +55,7 @@ public class ProductTBServiceImp implements ProductTBService {
 	@Override
 	public Map<String, Object> findProductTBPaging(HashMap<String, String> map, HttpServletRequest request) {
 		int cp = Integer.parseInt(map.get("cp"));
-		int ps = 10;
+		int ps = Integer.parseInt(map.get("ps"));
 		int calPage = 0;
 		calPage = (cp-1) * ps;
 		String branchOfficeNm = map.get("branch_office_nm");

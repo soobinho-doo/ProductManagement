@@ -118,7 +118,7 @@ public class UserTBServiceImp implements UserTBService {
 			accessToken = null;
 			result.put("id", null);
 			result.put("role", null);
-			result.put("Authorization", accessToken);
+			result.put("Authorization", null);
 		}
 		
 		return result;

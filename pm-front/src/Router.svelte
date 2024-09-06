@@ -1,16 +1,17 @@
 <script lang="ts">
     import Router from "svelte-spa-router";
+    import { onMount } from "svelte";
     import { auth, isLogin, isRefresh } from "./option/auth";
     import { get } from "svelte/store";
 
     onMount(() => {
-        const refreshInterval = setTimeout(() => {
+        const refreshInterval = setInterval(() => {
             if($isRefresh){
                 auth.refresh();
             }else{
                 clearInterval(refreshInterval);
             }
-        }, 1000 * 60 * 25)
+        }, 1000 * 60 * 29)
     })
 
     // 로그인 시 Auth = USER
@@ -94,7 +95,6 @@
 
     // 현황 관련
     import SalesStatusPage from "./page/salesstatus/SalesStatusPage.svelte";
-    import { onMount } from "svelte";
 
     // 관리자 페이지
     import AdminMainPage from "./page/admin/AdminMainPage.svelte";

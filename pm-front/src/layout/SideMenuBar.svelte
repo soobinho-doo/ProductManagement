@@ -22,7 +22,7 @@
 
 
 <div class="side-menu-bar border-none border-right-b1">
-    <div class="border-bottom-b1 brand">
+    <div class="height-50px border-bottom-b1 brand">
         <a class="fs-18 pretendard-bold color-white" href="/" use:link>Product Management</a>
     </div>
 

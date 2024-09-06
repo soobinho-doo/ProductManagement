@@ -37,7 +37,7 @@
 
 <style>
     .backdrop {width: 100%; height: 100%; position: fixed; top: 0; left: 0; background: rgba(0, 0, 0, 0.6); z-index: 5;}
-    .modal { max-width: 400px; min-width: 400px; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index: 10;}
+    .modal { max-width: 400px; min-width: 400px; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index: 10;}
     
     .modal-title {background: #2A3F54; padding: 8px 12px; border-top-right-radius: 4px; border-top-left-radius: 4px;}
     .modal-content {max-height: 600px; overflow-y: auto; padding: 16px 10px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;}

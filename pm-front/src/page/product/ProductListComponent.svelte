@@ -24,6 +24,7 @@
 
     let productDatas:any = [];
     let cp:number = 1; // 첫 페이지 번호
+    let ps:number = 10;
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
@@ -35,6 +36,7 @@
     const getProductList = async () => {
         let data = {
             cp: cp, 
+            ps: ps,
             keyword: keyword, 
             branch_office_nm: branchOfficeName,
         }

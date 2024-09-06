@@ -26,12 +26,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import product.management.common.jwt.JwtProvider;
 import product.management.product.mapper.ProductTBMapper;
-import product.management.stock.dto.StockBackupTB;
 import product.management.stock.dto.StockTB;
 import product.management.stock.dto.StockTBJoinVO;
 import product.management.stock.dto.StockTBUpdateVO;
 import product.management.stock.dto.StockTBVO;
-import product.management.stock.mapper.StockBackupTBMapper;
 import product.management.stock.mapper.StockTBMapper;
 
 @Slf4j
@@ -40,7 +38,6 @@ import product.management.stock.mapper.StockTBMapper;
 public class StockTBServiceImp implements StockTBService {
 
 	private final StockTBMapper stockTBMapper;
-	private final StockBackupTBMapper stockBackupTBMapper;
 	private final ProductTBMapper productTBMapper;
 	private final JwtProvider jwtProvider;
 	
@@ -248,15 +245,7 @@ public class StockTBServiceImp implements StockTBService {
 			productTBMapper.updateAddProductRecall(stockNo, stockTB.getProduct_sq());
 		}
 		
-		int result = stockTBMapper.insertStockTB(stockTB);
-		StockBackupTB stockBackupTB = new StockBackupTB();
-		stockBackupTB.setUser_id(user_id);
-		stockBackupTB.setStock_st(stockTB.getStock_st());
-		stockBackupTB.setProduct_sq(stockTB.getProduct_sq());
-		stockBackupTB.setStock_no(stockNo);
-		stockBackupTB.setStock_dt(stockTB.getStock_dt());
-		int backResult = stockBackupTBMapper.insertStockTB(stockBackupTB);
-		
+		int result = stockTBMapper.insertStockTB(stockTB);		
 		
 		return result;
 	}
