@@ -24,6 +24,27 @@ function setProduct () {
     }
 
     //
+    const hasList = async (cp:number, ps:number, branchOfficeName:string) => {
+        const accessToken = get(auth).Authorization;
+        try{
+            const options = {
+                path : '/api/product/paging/has', 
+                data : {
+                    cp: cp,
+                    ps: ps,
+                    branchOfficeName: branchOfficeName
+                },
+                accessToken : accessToken,
+            }
+            const response:any = await postApi(options)
+            return response
+
+        }catch(err){
+            throw err
+        }
+    }
+
+    //
     const info = async (sq:number) => {
         const accessToken = get(auth).Authorization;
         try{
@@ -92,6 +113,7 @@ function setProduct () {
 
     return {
         list,
+        hasList,
         info,
         input,
         modify,

@@ -8,9 +8,16 @@
         stockList();
     })
 
-    let prodcutHasStockList:any = [];
+    let branchNames:any = [];
+    let productNames:any = [];
+    let branchName:string = "";
+    let productSq:number;
+    let productHasStockList:any = [];
     const stockList = async () => {
-        prodcutHasStockList = await dashBaord.stockList();
+        const res = await dashBaord.stockList(branchName, productSq);
+        branchNames = res.branchNames;
+        productNames = res.productNames;
+        productHasStockList = res.stockProducts;
     }
 
 </script>
@@ -24,17 +31,33 @@
             </svg>
         </button>
     </div>
+
+    <!-- Search -->
+    <div class="mt-10">
+        <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={branchName} on:change={stockList}>
+            <option class="fs-1rem f-nato" value="">전체지점</option>
+            {#each branchNames as data}
+                <option class="fs-1rem f-nato" value="{data.branch_office_nm}">{data.branch_office_nm}</option>
+            {/each}
+        </select>
+        <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={productSq} on:change={stockList}>
+            <option class="fs-1rem f-nato" value="">전체상품</option>
+            {#each productNames as data}
+                <option class="fs-1rem f-nato" value="{data.product_sq}">{data.product_nm} {priceReplace(data.product_price)} 원 {data.product_weight}{data.product_weight_dt}</option>
+            {/each}
+        </select>
+    </div>
     
-    <div class="mt-10 list-box">
-        {#if prodcutHasStockList.length === 0}
+    <div class="mt-10 list-box gap-10">
+        {#if productHasStockList.length === 0}
             <div>
                 <p class="fs-18 pretendard-regular display-flex align-items gap-5">재고가 없습니다</p>
             </div>
         {:else}
-            {#each prodcutHasStockList as data}
+            {#each productHasStockList as data}
                 <div class="padding-6 border-b1 border-radius-4 margin-2">
                     <div>
-                        <span class="fs-1rem pretendard-regular">{data.branch_office_nm}</span>
+                        <span class="fs-1rem f-nato-bold">{data.branch_office_nm}</span>
                     </div>
                     <div class="mt-10">
                         <span class="fs-1rem pretendard-regular">{data.product_nm}</span>
@@ -57,7 +80,6 @@
 
 <style>
     .list-box {display: grid; grid-template-columns: repeat(auto-fill, minmax(20%, auto)); padding: 2px;}
-    .margin-2 {margin: 2px;}
 
     @media all and (max-width: 768px){
         .list-box {grid-template-columns: repeat(auto-fill, minmax(40%, auto));}

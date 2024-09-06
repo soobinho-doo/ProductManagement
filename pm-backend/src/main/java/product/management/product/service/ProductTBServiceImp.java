@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import product.management.branchoffice.dto.BranchOfficeTB;
 import product.management.common.jwt.JwtProvider;
 import product.management.product.dto.ProductTB;
 import product.management.product.dto.ProductTBVO;
@@ -43,11 +44,21 @@ public class ProductTBServiceImp implements ProductTBService {
 	}
 	
 	@Override
-	public List<ProductTB> findExistsStockByUserId(HttpServletRequest request) {
+	public Map<String, Object> findExistsStockByUserId(Map<String, Object> map, HttpServletRequest request) throws Exception {
 		String token = request.getHeader("Authorization");
+		String branchName = map.get("branchName").toString();
+		String productSq = map.get("productSq").toString();
 		String user_id = jwtProvider.getIdByToken(token);
 		
-		List<ProductTB> result = productTBMapper.selectExistsStockByUserId(user_id);
+		List<BranchOfficeTB> branchNames = productTBMapper.selectExistsStockBranchOfficeByUserId(user_id);
+		List<ProductTB> productNames = productTBMapper.selectExistsStockProductNmByUserId(branchName, user_id);
+		List<ProductTB> stockProducts = productTBMapper.selectExistsStockByUserId(branchName, productSq, user_id);
+		
+		Map<String, Object> result = Map.of(
+				"branchNames", branchNames,
+				"productNames", productNames,
+				"stockProducts", stockProducts
+			);
 		
 		return result;
 	}	
@@ -56,8 +67,8 @@ public class ProductTBServiceImp implements ProductTBService {
 	public Map<String, Object> findProductTBPaging(HashMap<String, String> map, HttpServletRequest request) {
 		int cp = Integer.parseInt(map.get("cp"));
 		int ps = Integer.parseInt(map.get("ps"));
-		int calPage = 0;
-		calPage = (cp-1) * ps;
+		int calPage = (cp-1) * ps;
+		
 		String branchOfficeNm = map.get("branch_office_nm");
 		String keyword = map.get("keyword");
 		
@@ -93,6 +104,7 @@ public class ProductTBServiceImp implements ProductTBService {
 		
 		Map<String, Object> result = Map.of(
 					"cp", cp,
+					"ps", ps,
 					"count", rowCount,
 					"list", list,
 					"pageCount",pageCount,
@@ -103,6 +115,46 @@ public class ProductTBServiceImp implements ProductTBService {
 				);
 		
 		
+		return result;
+	}
+	
+	@Override
+	public Map<String, Object> findExistsProductTBs(HashMap<String, String> map, HttpServletRequest request) {
+		int cp = Integer.parseInt(map.get("cp"));
+		int ps = Integer.parseInt(map.get("ps"));
+		int calPage = (cp-1) * ps;
+		String branchOfficeName = map.get("branchOfficeName");
+		
+		String token = request.getHeader("Authorization");
+		String user_id = jwtProvider.getIdByToken(token);
+		
+		int rowCount = productTBMapper.selectExistsProductTBsCount(user_id, branchOfficeName);
+		List<ProductTB> list = productTBMapper.selectExistsProductTBs(user_id, branchOfficeName, calPage, ps);
+		
+		int pageCount = (int)(Math.ceil((double)rowCount/ps));
+		
+		int showPage = 5; // 한페이지에 보여줄 페이징 개수
+		int pageGrp = (int)Math.ceil((double)cp / showPage);
+		
+		int sp = ((pageGrp-1) * showPage) + 1;
+		int ep = pageGrp * showPage;
+		
+		if(ep > pageCount) {
+			ep = pageCount;
+		}else if(ep == 0) {
+			ep = 1;
+		}
+		
+		Map<String, Object> result = Map.of(
+				"cp", cp,
+				"ps", ps,
+				"count", rowCount,
+				"list", list,
+				"pageCount",pageCount,
+				"sp", sp,
+				"ep", ep
+			);
+
 		return result;
 	}
 	

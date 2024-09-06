@@ -4,15 +4,19 @@ import { auth } from "./auth";
 
 function setDashBoard () {
 
-    const stockList = async () => {
+    const stockList = async (branchName:string, productSq:number) => {
         const accessToken = get(auth).Authorization;
 
         try{
             const options = {
-                path: '/api/product/dashboard', 
+                path: '/api/product/dashboard',
+                data: {
+                    branchName: branchName, 
+                    productSq: productSq
+                },
                 accessToken:accessToken
             }
-            const getStockList:any = await getApi(options);
+            const getStockList:any = await postApi(options);
             return getStockList;
 
         }catch(err){

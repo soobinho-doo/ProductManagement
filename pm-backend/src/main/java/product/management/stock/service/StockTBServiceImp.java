@@ -44,9 +44,9 @@ public class StockTBServiceImp implements StockTBService {
 	@Override
 	public Map<String, Object> findStockTBPaging(HashMap<String, String> map, HttpServletRequest request) {
 		int cp = Integer.parseInt(map.get("cp"));
-		int ps = 10;
-		int calPage = 0;
-		calPage = (cp-1) * ps;
+		int ps = Integer.parseInt(map.get("ps"));
+		int calPage = (cp-1) * ps;
+		
 		String stockSt = map.get("stock_st");
 		String startDt = map.get("start_dt");
 		String endDt = map.get("end_dt");
@@ -76,6 +76,7 @@ public class StockTBServiceImp implements StockTBService {
 		
 		Map<String, Object> result = Map.of(
 					"cp", cp,
+					"ps", ps,
 					"count", rowCount,
 					"pageCount",pageCount,
 					"list", list,

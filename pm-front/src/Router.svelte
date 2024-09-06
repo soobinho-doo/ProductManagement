@@ -28,7 +28,6 @@
         "/product/list":ProductListPage,
         "/stock/register":StockRegister,
         "/stock/list":StockListPage,
-        "/stock/backup/list":StockBackupListPage,
         "/salesstatus":SalesStatusPage,
         "*":Error404Page,
     }
@@ -47,7 +46,6 @@
         "/product/list":ProductListPage,
         "/stock/register":StockRegister,
         "/stock/list":StockListPage,
-        "/stock/backup/list":StockBackupListPage,
         "/salesstatus":SalesStatusPage,
         "/admin":AdminMainPage,
         "*":Error404Page,
@@ -91,7 +89,6 @@
     // 재고 관리
     import StockRegister from "./page/stock/StockRegister.svelte";
     import StockListPage from "./page/stock/StockListPage.svelte";
-    import StockBackupListPage from "./page/stock/StockBackupListPage.svelte";
 
     // 현황 관련
     import SalesStatusPage from "./page/salesstatus/SalesStatusPage.svelte";

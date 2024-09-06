@@ -105,14 +105,14 @@
             <div class="mt-20">
                 <span class="fs-1rem pretendard-bold">상품명 <span class="color-tomato">*</span></span>
                 <div class="mt-10">
-                    <input type="text" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={productName} placeholder="상품 이름 입력"/>
+                    <input type="text" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={productName} placeholder="상품 이름 입력" maxlength="70"/>
                 </div>
             </div>
 
             <!-- 기본, 냉장, 냉동 여부 -->
             <div class="mt-20">
                 <span class="fs-1rem pretendard-bold">냉장, 냉동 여부 <span class="color-tomato">*</span></span>
-                <div class="mt-10">
+                <div class="mt-10 display-flex align-items gap-20">
                     {#each keepDatas as data}
                         <label class="fs-1rem pretendard-regular">
                             <input type="radio" bind:group={productSt} value={data.value} />

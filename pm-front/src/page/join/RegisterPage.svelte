@@ -256,7 +256,7 @@
 <div class="layout-480">
     <div class="mt-50">
         <div class="mt-20 ta-c">
-            <a href="/" class="fs-18 pretendard-regular" use:link>Product Management 회원가입</a>
+            <a href="/" class="fs-125rem f-nato-bold" use:link>Product Management 회원가입</a>
         </div>
 
         <!-- 아이디 -->

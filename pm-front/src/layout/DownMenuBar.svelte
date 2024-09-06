@@ -5,7 +5,7 @@
 </script>
 
 <div class="down-menu-bar background-color-white border-top-b1 width-100">
-    <div class="display-flex align-items">
+    <div class="display-flex align-items height-50px">
         <!-- 메뉴 버튼 -->
         <button type="button" class="background-none border-none width-100" on:click={() => {push("/menu")}}>
             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="24" height="24" viewBox="0 0 512 512">
@@ -52,9 +52,8 @@
 </div>
 
 <style>
-    .down-menu-bar {display: none; padding: 8px 0;}
+    .down-menu-bar {display: none;}
     
-
     @media all and (max-width: 768px){
         .down-menu-bar {display: block; position: fixed; bottom: 0; height: 50px;}
     }

@@ -5,7 +5,7 @@
     import ProductModifyComponent from "./ProductModifyComponent.svelte";
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
-    import { priceReplace, mathRound, onlyNumber, keepDatas, weightDatas } from "../../option/utill";
+    import { priceReplace, mathRound, onlyNumber, keepDatas, weightDatas, pageSizeDatas } from "../../option/utill";
     import { product } from "../../option/product";
     import { auth } from "../../option/auth";
     import { get } from "svelte/store";
@@ -38,6 +38,7 @@
             productDatas = productList.list;
             rowCount = productList.count;
             cp = productList.cp;
+            ps = productList.ps;
             sp = productList.sp;
             ep = productList.ep;
             pageCount = productList.pageCount;
@@ -51,6 +52,8 @@
             }
 
     }
+
+    
 
     // 수정
     let isModal:boolean = false;
@@ -141,11 +144,11 @@
             
 
             <div class="mt-20 display-flex align-items justify-content-between">
-                <span class="fs-1rem pretendard-regular">등록 상품 {rowCount}</span>
+                <span class="fs-1rem f-nato-bold">등록 상품 {rowCount}</span>
                 <div class="display-flex align-items gap-5">
-                    <button type="button" class="fs-1rem pretendard-regular button-primary background-none border-default border-radius-4 padding-6-12" on:click={()=>{push("/product/register")}}>상품 등록</button>
+                    <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/product/register")}}>상품 등록</button>
                     <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={downloadProductListToExcel}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="excel-svg" width="24" height="22" viewBox="0 0 48 48">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="svg-size" width="24" height="22" viewBox="0 0 48 48">
                             <g fill="none" stroke="green" stroke-linecap="round" stroke-width="4">
                                 <path stroke-linejoin="round" d="M8 15V6a2 2 0 0 1 2-2h28a2 2 0 0 1 2 2v36a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-9"/>
                                 <path d="M31 15h3m-6 8h6m-6 8h6"/>
@@ -154,13 +157,18 @@
                         </svg>
                         <span class="fs-1rem pretendard-regular">엑셀</span>
                     </button>
+                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getProductList}>
+                        {#each pageSizeDatas as data}
+                            <option class="fs-1rem f-nato" value="{data}">{data}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
             <!-- Search End -->
 
             <!-- Window Content -->
             <div class="mt-10 display-table width-100 when-window">
-                <div class="display-table-row border-b1 background-color-custom-orange text-white">
+                <div class="display-table-row border-b1 bg-light-gray">
                     
                     <div class="display-table-cell padding-12">
                         <span class="fs-1rem pretendard-bold">지점</span> 
@@ -321,9 +329,9 @@
             <!-- Mobile End -->
 
             <div class="mt-20 display-flex align-items justify-content-right gap-10">
-                <span class="fs-1rem pretendard-regular">판매 총액 :  <span class="fs-1rem pretendard-regular color-custom-blue">{priceReplace(exCommission)}</span> 원</span>
-                <span class="fs-1rem pretendard-regular">|</span>
-                <span class="fs-1rem pretendard-regular">수익 총액 :  <span class="fs-1rem pretendard-regular color-custom-blue">{priceReplace(inCommission)}</span> 원</span>
+                <span class="fs-1rem f-nato">판매 총액 :  <span class="fs-1rem f-nato fw-b color-custom-blue">{priceReplace(exCommission)}</span> 원</span>
+                <span class="fs-1rem f-nato fw-b">|</span>
+                <span class="fs-1rem f-nato">수익 총액 :  <span class="fs-1rem f-nato fw-b color-custom-blue">{priceReplace(inCommission)}</span> 원</span>
             </div>
 
             <!-- 페이징 -->
@@ -369,7 +377,6 @@
 
 <style>
     .search-box {display: flex; align-items: center; gap: 10px;}
-    .excel-svg {vertical-align: middle;}
     .excel-btn {border: 1px solid green; transition: background, 0.3s;}
     .excel-btn > span {color: green;}
     .excel-btn:hover {background-color: rgb(6, 129, 6);}

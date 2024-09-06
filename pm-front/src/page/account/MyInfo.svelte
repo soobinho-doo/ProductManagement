@@ -1,5 +1,5 @@
 <script lang="ts">
-    import LoadingPage from "../../loading/LoadingPage.svelte";
+    import Loading from "../error/Loading.svelte";
     import ErrorAxiosPage from "../error/ErrorAxiosPage.svelte";
     import { account } from "../../option/account";
 
@@ -14,7 +14,7 @@
 
 </script>
 {#await promise}
-    <LoadingPage/>
+    <Loading/>
 {:then} 
     <div class="padding-6">
         <div>

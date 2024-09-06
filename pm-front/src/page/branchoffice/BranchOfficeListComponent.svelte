@@ -2,7 +2,7 @@
     import { link } from "svelte-spa-router";
     import {createEventDispatcher} from 'svelte';
     import Modal from "../../component/Modal.svelte";
-    import LoadingPage from "../../loading/LoadingPage.svelte";
+    import Loading from "../error/Loading.svelte";
     import { branchOffice } from "../../option/branchOffice";
 
     export let branchOfficeSq:number = 0;
@@ -59,7 +59,7 @@
     <span slot="modal-title" class="fs-1rem pretendard-bold color-white">지점 리스트</span>
     <div slot="modal-content">
         {#await getBranchOfficeList()} 
-            <LoadingPage/>
+            <Loading/>
         {:then} 
             <div class="display-grid width-100">
                 {#if branchOfficeDatas.length === 0}

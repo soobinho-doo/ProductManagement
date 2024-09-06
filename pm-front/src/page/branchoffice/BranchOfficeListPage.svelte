@@ -110,7 +110,7 @@
                         <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/branchoffice/register")}}>지점 등록</button>
                         <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getBranchOfficeList}>
                             {#each pageSizeDatas as data}
-                                <option class="fs-1rem" value={data}>{data}</option>
+                                <option class="fs-1rem f-nato" value="{data}">{data}</option>
                             {/each}
                         </select>
                         <button type="button" class="background-none border-b1 border-radius-4 padding-8-10" on:click={()=>{promise = getBranchOfficeList()}}>

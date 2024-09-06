@@ -59,6 +59,20 @@ img {max-width:100%;}
 .f-nato {font-family: 'NotoSans';}
 .f-nato-bold {font-family: 'NotoSansBold';}
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+  appearance: none; /* 모든 브라우저에 대해 appearance를 제거 */
+  -moz-appearance: textfield; /* Firefox에 대해 appearance를 제거 (선택적) */
+  -webkit-appearance: none; /* WebKit 기반 브라우저에 대해 appearance 제거 */
+}
+
 /* Theme Change */
 .svg-color-change {fill:var(--fill);}
 .svg-size {width: 18px; height: 18px;}

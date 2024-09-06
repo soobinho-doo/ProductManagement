@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import product.management.branchoffice.dto.BranchOfficeTB;
 import product.management.product.dto.ProductTB;
 import product.management.product.dto.ProductTBVO;
 
@@ -18,8 +19,10 @@ public interface ProductTBMapper {
 	// Select
 	// Paging
 	@Select("SELECT b.PRODUCT_SQ, b.PRODUCT_NM, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, "
-			+ "b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ  "
-			+ "WHERE b.USER_ID = #{user_id} "
+			+ "b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_MEASURE, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
+			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ  "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
 			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branch_office_nm},'%') "
 			+ "AND b.PRODUCT_NM LIKE CONCAT('%',#{keyword},'%') "
 			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC LIMIT #{cp}, #{ps}")
@@ -33,13 +36,49 @@ public interface ProductTBMapper {
 	int selectProductRowByKeywordAndUserId(@Param("user_id") String user_id, @Param("branch_office_nm") String branch_office_nm, @Param("keyword")  String keyword);
 	// End Paging
 	
+	// 재고가 있는 상품 리스트 페이징 
+	@Select("SELECT b.PRODUCT_SQ, b.BRANCH_OFFICE_SQ, a.BRANCH_OFFICE_NM, b.PRODUCT_NM, b.PRODUCT_ST, b.PRODUCT_PRICE, b.PRODUCT_COMMISSION, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
+			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branchOfficeName},'%') "
+			+ "AND b.PRODUCT_STOCK - b.PRODUCT_SELL - b.PRODUCT_RECALL > 0 "
+			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC LIMIT #{cp}, #{ps}")
+	List<ProductTB> selectExistsProductTBs(@Param("user_id") String user_id, @Param("branchOfficeName") String branchOfficeName, @Param("cp") int cp, @Param("ps") int ps);
+	@Select("SELECT COUNT(*) "
+			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branchOfficeName},'%') "
+			+ "AND b.PRODUCT_STOCK - b.PRODUCT_SELL - b.PRODUCT_RECALL > 0 ")
+	int selectExistsProductTBsCount(@Param("user_id") String user_id, @Param("branchOfficeName") String branchOfficeName);
+	
+	// 유저의 재고가 있는 지점별 For
+	@Select("SELECT DISTINCT a.BRANCH_OFFICE_NM "
+			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
+			+ "AND b.PRODUCT_STOCK - b.PRODUCT_SELL - b.PRODUCT_RECALL > 0")
+	List<BranchOfficeTB> selectExistsStockBranchOfficeByUserId(@Param("user_id") String user_id);
+	// 유저의 재고가 있는 상품이름별 For
+	@Select("SELECT DISTINCT b.PRODUCT_SQ, b.PRODUCT_NM, b.PRODUCT_PRICE, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT "
+			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
+			+ "AND b.PRODUCT_STOCK - b.PRODUCT_SELL - b.PRODUCT_RECALL > 0 "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branchName},'%')")
+	List<ProductTB> selectExistsStockProductNmByUserId(@Param("branchName")String branchName, @Param("user_id") String user_id);
 	// 유저의 재고가 있는 상품들 For Dashboard
 	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_NM, b.PRODUCT_PRICE, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
 			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
-			+ "WHERE b.USER_ID = #{user_id} "
+			+ "WHERE 1=1 "
+			+ "AND b.USER_ID = #{user_id} "
 			+ "AND b.PRODUCT_STOCK - b.PRODUCT_SELL - b.PRODUCT_RECALL > 0 "
+			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branchName},'%') "
+			+ "AND b.PRODUCT_SQ LIKE CONCAT('%',#{productSq},'%') "
 			+ "ORDER BY a.BRANCH_OFFICE_NM ASC, b.PRODUCT_NM ASC, b.PRODUCT_PRICE ASC")
-	List<ProductTB> selectExistsStockByUserId(String user_id);
+	List<ProductTB> selectExistsStockByUserId(@Param("branchName")String branchName, @Param("productSq")String productSq, @Param("user_id") String user_id);
+	
 	
 	// 수수료 시 
 	@Select("SELECT * "

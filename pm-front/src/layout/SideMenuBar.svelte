@@ -22,8 +22,8 @@
 
 
 <div class="side-menu-bar border-none border-right-b1">
-    <div class="height-50px border-bottom-b1 brand">
-        <a class="fs-18 pretendard-bold color-white" href="/" use:link>Product Management</a>
+    <div class="height-50px display-flex align-items justify-content-center border-bottom-b1">
+        <button type="button" class="fs-125rem pretendard-bold color-white background-none border-none" on:click={()=>{push("/")}}>Product Management</button>
     </div>
 
     <div class="border-top-black">
@@ -63,12 +63,3 @@
         {/each}
     </div>
 </div>
-
-
-
-<style>
-    .brand {padding: 14px 12px 14px 12px;}
-    @media all and (max-width: 480px){
-        
-    }
-</style>

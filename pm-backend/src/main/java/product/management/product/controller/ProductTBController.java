@@ -38,20 +38,29 @@ public class ProductTBController {
 	}
 	
 	// 상품 재고 리스트 
-	@GetMapping("/product/dashboard")
-	public ResponseEntity<List<ProductTB>> findHasStockByUserId(HttpServletRequest request) {
-		List<ProductTB> productTBList = productTBService.findExistsStockByUserId(request);
+	@PostMapping("/product/dashboard")
+	public ResponseEntity<Map<String, Object>> findHasStockByUserId(@RequestBody Map<String, Object> map, HttpServletRequest request) throws Exception {
+		Map<String, Object> result = productTBService.findExistsStockByUserId(map, request);
 		
-		return ResponseEntity.ok(productTBList);
+		return ResponseEntity.ok(result);
 	}
 	
 	// 리스트 페이징
 	@PostMapping("/product/paging")
-	public ResponseEntity<Map<String, Object>> findProductTBPaging(@RequestBody  HashMap<String, String> map, HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> findProductTBPaging(@RequestBody HashMap<String, String> map, HttpServletRequest request) {
 		Map<String, Object> result = productTBService.findProductTBPaging(map, request);
 		
 		return ResponseEntity.ok(result);
 	}
+	
+	// 재고 있는 것만 페이징
+	@PostMapping("/product/paging/has")
+	public ResponseEntity<Map<String, Object>> findExistsProductTBs(@RequestBody HashMap<String, String> map, HttpServletRequest request) {
+		Map<String, Object> result = productTBService.findExistsProductTBs(map, request);
+		
+		return ResponseEntity.ok(result);
+	}
+	
 	
 	// 엑셀 다운
 	@GetMapping("/product/excel/download")

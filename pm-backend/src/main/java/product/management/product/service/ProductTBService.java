@@ -14,9 +14,10 @@ public interface ProductTBService {
 	// Select
 	ProductTB findProductTBByProductSq(Long product_Sq);
 
-	List<ProductTB> findExistsStockByUserId(HttpServletRequest request);
+	Map<String, Object> findExistsStockByUserId(Map<String, Object> map, HttpServletRequest request) throws Exception;
 	
 	Map<String, Object> findProductTBPaging(HashMap<String, String> map, HttpServletRequest request);
+	Map<String, Object> findExistsProductTBs(HashMap<String, String> map, HttpServletRequest request);
 	
 	void findProductTBListByExcel(String user_id, String keyword, String branch_office_nm, HttpServletResponse response) throws IOException;
 	

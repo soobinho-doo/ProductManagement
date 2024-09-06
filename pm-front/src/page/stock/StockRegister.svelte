@@ -2,6 +2,7 @@
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
     import Header from "../../layout/Header.svelte";
     import ProductListComponent from "../product/ProductListComponent.svelte";
+    import ProductHasListComponent from "../product/ProductHasListComponent.svelte";
     import { stockStList } from "../../option/utill";
     import { stock } from "../../option/stock";
 
@@ -16,11 +17,16 @@
     let stockDate:string = year + '-' + month + '-' + date;
 
     
-    // 상품 선택
+    // 상품 선택 납품일시 전체 
     let selectProduct:any = [];
     let isProdcut:boolean = false;
     const isProductModal = () => {
         isProdcut = true;
+    }
+
+    let isProductHas:boolean = false;
+    const isProductHasModal = () => {
+        isProductHas = true;
     }
 
     // 등록 버튼
@@ -90,14 +96,22 @@
                                 <p class="fs-1rem pretendard-regular mobile-width-100 min-width-250 padding-8-0">상품을 선택 해 주세요</p>
                             </div>
                             <div>
-                                <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductModal}>상품 선택</button>
+                                {#if stockSt === "1"}
+                                    <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductModal}>상품 선택</button>
+                                {:else}
+                                    <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductHasModal}>상품 선택</button>
+                                {/if}
                             </div>
                         {:else}
                             <div>
                                 <p class="fs-1rem pretendard-regular mobile-width-100 min-width-250 padding-8-0">{selectProduct.product_nm}</p>
                             </div>
                             <div>
-                                <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductModal}>상품 변경</button>
+                                {#if stockSt === "1"}
+                                    <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductModal}>상품 변경</button>
+                                {:else}
+                                    <button type="button" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 background-none border-default border-radius-4 padding-8-12" on:click={isProductHasModal}>상품 변경</button>
+                                {/if}
                             </div>
                         {/if}
                     </div>
@@ -177,13 +191,13 @@
             <div class="mt-20">
                 <span class="fs-1rem pretendard-bold">납품 ⦁ 판매 ⦁ 회수 당일 날짜 <span class="color-tomato">*</span></span>
                 <div class="mt-10">
-                    <input type="date" class="fs-1rem pretendard-regular mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={stockDate}/>
+                    <input type="date" class="fs-1rem f-nato mobile-width-100 min-width-250 border-default border-radius-4 padding-8-12" bind:value={stockDate}/>
                 </div>
             </div>
 
             <!-- 등록 버튼 -->
             <div class="mt-30 ta-c">
-                <button type="button" class="fs-1rem pretendard-regular button-primary background-none border-default border-radius-4 padding-12-16" on:click={addStockButton}>재고 등록</button>
+                <button type="button" class="fs-1rem f-nato button-primary background-none border-default border-radius-4 padding-8-16" on:click={addStockButton}>재고 등록</button>
             </div>
 
         </div>
@@ -197,3 +211,4 @@
 </div>
 
 <ProductListComponent bind:isProduct={isProdcut} bind:selectProduct={selectProduct} />
+<ProductHasListComponent bind:isProductHas={isProductHas} bind:selectProduct={selectProduct} />

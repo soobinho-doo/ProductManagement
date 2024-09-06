@@ -2,11 +2,12 @@
     import SideMenuBar from "../../layout/SideMenuBar.svelte";
     import Header from "../../layout/Header.svelte";
     import StockModifyComponent from "./StockModifyComponent.svelte";
+    import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
+
     import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
-    import { mathRound, priceReplace, stockStDatas, stockStList } from "../../option/utill";
+    import { mathRound, pageSizeDatas, priceReplace, stockStDatas, stockStList } from "../../option/utill";
     import { stock } from "../../option/stock";
-    import BranchOfficeListComponent from "../branchoffice/BranchOfficeListComponent.svelte";
     import { noti } from "../../option/store";
     import { get } from "svelte/store";
     import { auth } from "../../option/auth";
@@ -29,6 +30,7 @@
     let startDt = oneMonthAgo.getFullYear() + '-'+oneMonth + '-'+oneDay;
     let endDt = year + '-' + month + '-' + date;
     let cp:number = 1; // 첫 페이지 번호
+    let ps:number = 10;
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
@@ -57,6 +59,7 @@
             start_dt:startDt,
             end_dt:endDt,
             cp: cp, 
+            ps: ps,
             keyword:keyword, 
             branch_office_nm: branchOfficeName,
         }
@@ -66,6 +69,7 @@
         dashDatas = stockList.listAll;
         rowCount = stockList.count;
         cp = stockList.cp;
+        ps = stockList.ps;
         sp = stockList.sp;
         ep = stockList.ep;
         pageCount = stockList.pageCount;
@@ -226,21 +230,26 @@
             
             <!--  -->
             <div class="mt-20 display-flex align-items justify-content-between">
-                <span class="fs-1rem pretendard-regular">등록 리스트 {rowCount}</span>
+                <span class="fs-1rem f-nato fw-b">등록 리스트 {rowCount}</span>
                 <div class="display-flex align-items gap-5">
-                    <button type="button" class="fs-1rem pretendard-regular button-primary background-none border-default border-radius-4 padding-6-12" on:click={()=>{push("/stock/register")}}>재고 등록</button>
+                    <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/stock/register")}}>재고 등록</button>
                     <div class="display-flex align-items gap-10">
                         <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={downloadStockListToExcel}>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="excel-svg" width="24" height="22" viewBox="0 0 48 48">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="svg-size" width="24" height="22" viewBox="0 0 48 48">
                                 <g fill="none" stroke="green" stroke-linecap="round" stroke-width="4">
                                     <path stroke-linejoin="round" d="M8 15V6a2 2 0 0 1 2-2h28a2 2 0 0 1 2 2v36a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-9"/>
                                     <path d="M31 15h3m-6 8h6m-6 8h6"/>
                                     <path stroke-linejoin="round" d="M4 15h18v18H4zm6 6l6 6m0-6l-6 6"/>
                                 </g>
                             </svg>
-                            <span class="fs-1rem pretendard-regular">엑셀</span>
+                            <span class="fs-1rem f-nato">엑셀</span>
                         </button>
                     </div>
+                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getStockList}>
+                        {#each pageSizeDatas as data}
+                            <option class="fs-1rem f-nato" value="{data}">{data}</option>
+                        {/each}
+                    </select>
                 </div>
             </div>
 
@@ -249,13 +258,13 @@
                 <div class="display-table border-default border-radius-4" style="background-color: #c6dfec;">
                     <div class="display-table-row border-bottom-b1">
                         <div class="display-table-cell ta-c  padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 납품 수</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 납품 수</span>
                         </div>
                         <div class="display-table-cell ta-c  padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 납품 판매금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 납품 판매금액</span>
                         </div>
                         <div class="display-table-cell ta-c  padding-2 ">
-                            <span class="fs-1rem pretendard-regular width-100">총 납품 수익금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 납품 수익금액</span>
                         </div>
                     </div>
                     <div class="display-table-row">
@@ -273,13 +282,13 @@
                 <div class="display-table border-default border-radius-4" style="background-color: #ffb6a9;">
                     <div class="display-table-row border-bottom-b1">
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 판매 수</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 판매 수</span>
                         </div>
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 판매 판매금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 판매 판매금액</span>
                         </div>
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 판매 수익금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 판매 수익금액</span>
                         </div>
                     </div>
                     <div class="display-table-row">
@@ -297,13 +306,13 @@
                 <div class="display-table border-default border-radius-4" style="background-color: #caffca;">
                     <div class="display-table-row border-bottom-b1">
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 회수 수</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 회수 수</span>
                         </div>
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 회수 판매금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 회수 판매금액</span>
                         </div>
                         <div class="display-table-cell ta-c padding-2">
-                            <span class="fs-1rem pretendard-regular width-100">총 회수 수익금액</span>
+                            <span class="fs-1rem f-nato fw-b width-100">총 회수 수익금액</span>
                         </div>
                     </div>
                     <div class="display-table-row">
@@ -323,7 +332,7 @@
 
             <!-- Window Content -->
             <div class="mt-10 display-table width-100 when-window">
-                <div class="display-table-row border-b1 background-color-custom-orange text-white">
+                <div class="display-table-row border-b1 bg-light-gray text-white">
                     <div class="display-table-cell ta-c padding-12">
                         <span class="fs-1rem pretendard-bold">구분</span> 
                     </div>
@@ -529,7 +538,6 @@
 
 <style>
     .search-box {display: flex; align-items: center; gap: 10px;}
-    .excel-svg {vertical-align: middle;}
     .excel-btn {border: 1px solid green; transition: background, 0.3s;}
     .excel-btn > span {color: green;}
     .excel-btn:hover {background-color: rgb(6, 129, 6);}

@@ -117,7 +117,7 @@
         <div class="mt-20">
             <span class="fs-1rem pretendard-bold">상품명<span class="color-tomato">*</span></span>
             <div class="mt-5">
-                <input type="text" class="fs-1rem pretendard-regular width-100 border-default border-radius-4 padding-8-12" bind:value={productName} placeholder="상품 이름 입력"/>
+                <input type="text" class="fs-1rem pretendard-regular width-100 border-default border-radius-4 padding-8-12" bind:value={productName} placeholder="상품 이름 입력" maxlength="70"/>
             </div>
         </div>
 

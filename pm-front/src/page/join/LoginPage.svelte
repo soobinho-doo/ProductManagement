@@ -85,13 +85,13 @@
         <div class="layout-480">
             <div class="mt-30">
                 <div class="mt-10">
-                    <input type="text" class="fs-16 pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userId} bind:this={userIdElement} placeholder="아이디"/>
+                    <input type="text" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userId} bind:this={userIdElement} placeholder="아이디"/>
                 </div>
             </div>
             
             <div class="mt-20">
                 <div class="mt-10 position-relative">
-                    <input type="password" class="fs-16 pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userPass} bind:this={userPassElement} placeholder="패스워드"/>
+                    <input type="password" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userPass} bind:this={userPassElement} placeholder="패스워드"/>
                     <button type="button" class="background-none border-none pass-icon" on:click={passChange}>
                         {#if isShowPass}
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="22" height="22" viewBox="0 0 576 512">
@@ -111,10 +111,10 @@
             </div>
 
             <div class="mt-50">
-                <button type="button" class="fs-16 pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={loginBtn}>로그인</button>
+                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={loginBtn}>로그인</button>
             </div>
             <div class="mt-10">
-                <button type="button" class="fs-16 pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={() => {push("/register")}}>회원가입</button>
+                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={() => {push("/register")}}>회원가입</button>
             </div>
             <div class="mt-20">
                 <div class="display-flex align-items justify-content-right gap-10">
@@ -134,5 +134,5 @@
 <svelte:window on:keydown={enterEvent}/>
 
 <style>
-    .pass-icon {position: absolute; top: 10px; right: 12px;}
+    .pass-icon {position: absolute; top: 12px; right: 12px;}
 </style>

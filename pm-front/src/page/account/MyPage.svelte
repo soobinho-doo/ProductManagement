@@ -44,9 +44,9 @@
                 <!-- 작은 메뉴들 -->
                 <div class="mypqge-menu-box">
                     {#each menus as menu}
-                        <button type="button" class="{menuSelect === menu.id ? 'menu-btn-slect' : ''} fs-16 pretendard-bold background-none border-none width-100 padding-12-16 button-primary" on:click={() => { menuSelect = menu.id }}>{menu.name}</button>   
+                        <button type="button" class="{menuSelect === menu.id ? 'menu-btn-slect' : ''} fs-1rem f-nato fw-b background-none border-none width-100 padding-12-16 button-primary border-radius-4" on:click={() => { menuSelect = menu.id }}>{menu.name}</button>   
                     {/each}
-                        <button type="button" class="fs-16 pretendard-bold background-none border-none width-100 padding-12-16 button-primary" on:click={logout}>로그아웃</button>
+                        <button type="button" class="fs-1rem f-nato fw-b background-none border-none width-100 padding-12-16 button-primary border-radius-4" on:click={logout}>로그아웃</button>
                 </div>
         
                 <!-- 메뉴에 해당하는 컴포넌트 -->

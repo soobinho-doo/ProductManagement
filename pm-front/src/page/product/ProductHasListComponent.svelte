@@ -26,19 +26,12 @@
     let cp:number = 1; // 첫 페이지 번호
     let ps:number = 10;
     let rowCount:number = 0;
-    let keyword:string = "";
     let sp:number; // 시작 페이지
     let ep:number; // 마지막 페이지
     let pageCount:number; // 페이지 개수
     let pageDatas:any = []; 
     const getProductList = async () => {
-        let data = {
-            cp: cp, 
-            ps: ps,
-            keyword: keyword, 
-            branch_office_nm: branchOfficeName,
-        }
-        const productList:any = await product.list(data);
+        const productList:any = await product.hasList(cp, ps, branchOfficeName);
             productDatas = productList.list;
             rowCount = productList.count;
             cp = productList.cp;
@@ -56,15 +49,15 @@
     }
 
     // 지점 모달
-    export let isProduct:boolean = false;
-    $:if(isProduct){
+    export let isProductHas:boolean = false;
+    $:if(isProductHas){
         branchOfficeName = "";
     }
 
     // 지점 초이스
     const dispatch = createEventDispatcher();
     const productChoice = (data:any) => {
-        isProduct = false;
+        isProductHas = false;
         selectProduct = data
         dispatch("refresh")
         cp = 1;
@@ -73,7 +66,7 @@
     }
 </script>
 
-<Modal bind:isModal={isProduct}>
+<Modal bind:isModal={isProductHas}>
     <span slot="modal-title" class="fs-1rem pretendard-bold color-white">상품 리스트</span>
     <div slot="modal-content">
         {#await getProductList()} 
