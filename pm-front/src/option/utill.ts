@@ -32,9 +32,9 @@ export let keepDatas = [
     {label:"냉동", value:"3", id:"three"},
 ]
 
-// 무게 표시
+// 무게 단위 표시
 export let weightDatas = [
-    "mg", "g", "kg", "t", "ml", "l", "통", "팩", "봉지", "반통", "개"
+    "mg", "g", "kg", "t", "ml", "l", "통", "팩", "봉지", "반통", "개", "망", "박스"
 ]
 
 // 납품, 판매, 회수 여부
