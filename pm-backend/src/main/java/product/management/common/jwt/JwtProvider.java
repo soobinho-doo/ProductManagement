@@ -48,7 +48,7 @@ public class JwtProvider {
         String refreshToken = Jwts.builder()
     		    .subject(aesUtil.aes256Encode(userTB.getUser_id()))
                 .issuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .expiration(Date.from(LocalDateTime.now().plusDays(7).atZone(ZoneId.systemDefault()).toInstant()))
+                .expiration(Date.from(LocalDateTime.now().plusDays(14).atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(setSecretKey())
                 .compact();
 

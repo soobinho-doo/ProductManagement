@@ -39,10 +39,10 @@
 
 </script>
 
-<header class="height-50px display-flex align-items justify-content-between border-bottom-b1 background-color-white">
+<header class="height-50px display-flex align-items justify-content-between border-bottom-b1 background-color-white z-index-99">
     <div class="padding-12">
         <a class="brand fs-125rem pretendard-bold" href="/" use:link>Product Management</a>
-        <button type="button" class="not-show border-none background-none" on:click={isSideHide}>
+        <button type="button" class="not-show border-none background-none" aria-label="sidebar" on:click={isSideHide}>
             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="24" height="24" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm16 5H4v2h16v-2z"/>
             </svg>
@@ -66,7 +66,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change"  width="16" height="16" viewBox="0 0 24 24">
                             <path d="M17 3h-3v2h3v16H7V5h3V3H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2m-5 4a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2m4 8H8v-1c0-1.33 2.67-2 4-2s4 .67 4 2v1m0 3H8v-1h8v1m-4 2H8v-1h4v1m1-15h-2V1h2v4Z"/>
                         </svg>
-                        <span class="fs-14 pretendard-regular fw-b">MyPage</span>
+                        <span class="fs-14 pretendard-regular fw-b">마이</span>
                     </li>
                     <li class="display-flex align-items gap-5 button-hover padding-12-6" role="presentation" on:click={()=>{push("/setting")}}>
                         <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="16" height="16" viewBox="0 0 24 24">

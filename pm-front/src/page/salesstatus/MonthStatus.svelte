@@ -31,13 +31,13 @@
 {:then} 
     <div class="mt-20">
         <div class="mt-10 display-flex align-items">
-            <button type="button" class="background-none border-none width-100" on:click={minusYear}>
+            <button type="button" class="background-none border-none width-100" aria-label="minusYear" on:click={minusYear}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48">
                     <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M31 36L19 24L31 12"/>
                 </svg>
             </button>
             <span class="fs-20 pretendard-bold ta-c width-100">{year} 년</span>
-            <button type="button" class="background-none border-none width-100" on:click={plusYear}>
+            <button type="button" class="background-none border-none width-100" aria-label="plusYear" on:click={plusYear}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48">
                     <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M19 12L31 24L19 36"/>
                 </svg>

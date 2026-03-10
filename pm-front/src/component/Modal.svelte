@@ -18,7 +18,7 @@
         <!-- 타이틀 -->
         <div class="display-flex align-items justify-content-between modal-title">
             <slot name="modal-title"></slot>
-            <button type="button" class="fs-16 pretendard-regular background-none border-none" on:click={closeModal}>
+            <button type="button" class="fs-16 pretendard-regular background-none border-none" aria-label="modal close" on:click={closeModal}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#FFF" width="20" height="20" viewBox="0 0 16 16">
                     <path d="M4.28 3.22a.75.75 0 0 0-1.06 1.06L6.94 8l-3.72 3.72a.75.75 0 1 0 1.06 1.06L8 9.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L9.06 8l3.72-3.72a.75.75 0 0 0-1.06-1.06L8 6.94L4.28 3.22Z" clip-rule="evenodd"/>
                 </svg>

@@ -5,6 +5,8 @@
     import ProductHasListComponent from "../product/ProductHasListComponent.svelte";
     import { stockStList } from "../../option/utill";
     import { stock } from "../../option/stock";
+    import { push } from "svelte-spa-router";
+    import { noti } from "../../option/store";
 
     
     // 
@@ -48,7 +50,11 @@
             stock_no : stockNo, 
             stock_dt : stockDate,
         }
-        await stock.input(data);
+        const res = await stock.input(data);
+        if(res === 1){
+            push("/stock/list")
+            noti.success("재고 등록 완료",2000);
+        }
     } 
     
 

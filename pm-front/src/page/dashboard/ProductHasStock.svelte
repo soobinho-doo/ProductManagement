@@ -3,6 +3,7 @@
     import { priceReplace } from "../../option/utill";
     import { push } from "svelte-spa-router";
     import { dashBaord } from "../../option/dashboard";
+    import StockRegisterComponent from "../stock/StockRegisterComponent.svelte";
 
     onMount( async ()=>{
         stockList();
@@ -20,12 +21,20 @@
         productHasStockList = res.stockProducts;
     }
 
+    //
+    let isModal:boolean = false;
+    let choiceData:any = [];
+    function selectionControl(data:any) {
+        isModal = true;
+        choiceData = data;
+    }
+
 </script>
 
 <div class="padding-12 box-shadow-primary background-color-white">
     <div class="display-flex align-items justify-content-between">
         <span class="fs-18 pretendard-bold">현 재고 상품리스트</span>
-        <button type="button" class="background-none border-none" on:click={()=>{push("/product/list")}}>
+        <button type="button" class="background-none border-none" aria-label="product list" on:click={()=>{push("/product/list")}}>
             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="24" height="24" viewBox="0 0 24 24">
                 <path d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/>
             </svg>
@@ -71,12 +80,24 @@
                     <div class="mt-10 display-flex align-items justify-content-right">
                         <span class="fs-1rem pretendard-bold color-tomato">재고 : {data.product_stock - data.product_sell - data.product_recall} 개</span>
                     </div>
+                    <div class="mt-10 display-flex align-items justify-content-right">
+                        <button type="button" class="fs-075rem f-nato background-none border-none" aria-label="빠른실행" on:click={()=>{selectionControl(data)}}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <g fill="none" stroke="#2198d5" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m8 8.5l3.5 3.5L8 15.5m6-7l3.5 3.5l-3.5 3.5" />
+                                    <path d="M3 20.4V3.6a.6.6 0 0 1 .6-.6h16.8a.6.6 0 0 1 .6.6v16.8a.6.6 0 0 1-.6.6H3.6a.6.6 0 0 1-.6-.6Z" />
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             {/each}
         {/if}
          
     </div>
 </div>
+
+<StockRegisterComponent bind:isModal={isModal} bind:choiceData={choiceData} on:refresh={stockList}/>
 
 <style>
     .list-box {display: grid; grid-template-columns: repeat(auto-fill, minmax(20%, auto)); padding: 2px;}

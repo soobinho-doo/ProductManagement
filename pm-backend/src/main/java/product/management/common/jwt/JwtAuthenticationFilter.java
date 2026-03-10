@@ -22,15 +22,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		
 		String token = jwtProvider.getToken(request);
-//		
-//		if(token != null && jwtProvider.validateToken(token)){
-//
-//            token = token.split(" ")[1].trim();
-//            Authentication authentication = jwtProvider.authentication(token);
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//        }
-		
-		
+		if(token != null) {
+			if(!token.isEmpty() && jwtProvider.validateToken(token)) {
+				
+				Authentication authentication = jwtProvider.authentication(token);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		}
 		//
 		filterChain.doFilter(request, response);
 		

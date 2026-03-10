@@ -44,10 +44,8 @@ function setStock () {
                 accessToken : accessToken,
             }
             const stockInput = await postApi(options);
-            if(stockInput === 1){
-                push("/stock/list")
-                noti.success("재고 등록 완료",2000);
-            }
+            return stockInput;
+            
         }catch(err){
             throw err
         }

@@ -18,7 +18,7 @@
     // 리스트 Get
     let productDatas:any = [];
     let cp:number = 1; // 첫 페이지 번호
-    let ps:number = 10; // 
+    let ps:number = 20; // 
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
@@ -28,6 +28,11 @@
     let exCommission:string = "";   // 수수료 미포함 총 가격
     let pageDatas:any = []; 
     const getProductList = async () => {
+        let pageSize = localStorage.getItem('ps');
+        if (pageSize && !isNaN(parseInt(pageSize, 10))) {
+            ps = parseInt(pageSize, 10);
+        }
+
         let data = {
             cp: cp, 
             ps: ps,
@@ -124,7 +129,7 @@
             
             <div class="search-box gap-10">
                 <div class="mt-10">
-                    <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-8-12 when-480" on:click={isBranchOfficeModal}>
+                    <button type="button" class="fs-1rem pretendard-regular fw-b background-none border-default border-radius-4 padding-8-12 when-480" on:click={isBranchOfficeModal}>
                         {#if branchOfficeName}
                             {branchOfficeName}
                         {:else}
@@ -134,7 +139,7 @@
                 </div>
                 <div class="mt-10 display-flex align-items">
                     <input type="search" class="fs-1rem pretendard-regular border-default border-radius-4 inp-default padding-8-12 when-480" bind:value={keyword} on:input={()=>{cp = 1; getProductList()}} placeholder="상품 명 입력"/>
-                    <button type="button" class="border-none background-none padding-4" on:click={()=>{getProductList()}}>
+                    <button type="button" class="border-none background-none padding-4" aria-label="상품 리스트" on:click={()=>{getProductList()}}>
                         <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="18" height="18" viewBox="0 0 512 512">
                             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
                         </svg>
@@ -146,7 +151,7 @@
             <div class="mt-20 display-flex align-items justify-content-between">
                 <span class="fs-1rem f-nato-bold">등록 상품 {rowCount}</span>
                 <div class="display-flex align-items gap-5">
-                    <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/product/register")}}>상품 등록</button>
+                    <button type="button" class="fs-1rem f-nato fw-b color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/product/register")}}>상품 등록</button>
                     <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={downloadProductListToExcel}>
                         <svg xmlns="http://www.w3.org/2000/svg" class="svg-size" width="24" height="22" viewBox="0 0 48 48">
                             <g fill="none" stroke="green" stroke-linecap="round" stroke-width="4">
@@ -155,9 +160,9 @@
                                 <path stroke-linejoin="round" d="M4 15h18v18H4zm6 6l6 6m0-6l-6 6"/>
                             </g>
                         </svg>
-                        <span class="fs-1rem pretendard-regular">엑셀</span>
+                        <span class="fs-1rem pretendard-regular fw-b">엑셀</span>
                     </button>
-                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getProductList}>
+                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={()=>{localStorage.setItem('ps', ps.toString()); getProductList()}}>
                         {#each pageSizeDatas as data}
                             <option class="fs-1rem f-nato" value="{data}">{data}</option>
                         {/each}
@@ -169,7 +174,6 @@
             <!-- Window Content -->
             <div class="mt-10 display-table width-100 when-window">
                 <div class="display-table-row border-b1 bg-light-gray">
-                    
                     <div class="display-table-cell padding-12">
                         <span class="fs-1rem pretendard-bold">지점</span> 
                     </div>
@@ -329,9 +333,9 @@
             <!-- Mobile End -->
 
             <div class="mt-20 display-flex align-items justify-content-right gap-10">
-                <span class="fs-1rem f-nato">판매 총액 :  <span class="fs-1rem f-nato fw-b color-custom-blue">{priceReplace(exCommission)}</span> 원</span>
-                <span class="fs-1rem f-nato fw-b">|</span>
-                <span class="fs-1rem f-nato">수익 총액 :  <span class="fs-1rem f-nato fw-b color-custom-blue">{priceReplace(inCommission)}</span> 원</span>
+                <span class="fs-125rem f-nato fw-b">판매 총액 :  <span class="fs-1rem f-nato-bold fw-b color-custom-blue">{priceReplace(exCommission)}</span> 원</span>
+                <span class="fs-125rem f-nato fw-b">|</span>
+                <span class="fs-125rem f-nato fw-b">수익 총액 :  <span class="fs-1rem f-nato-bold fw-b color-custom-blue">{priceReplace(inCommission)}</span> 원</span>
             </div>
 
             <!-- 페이징 -->

@@ -23,14 +23,17 @@
     let year = today.getFullYear();
     let month = String(today.getMonth() + 1).padStart(2, "0");
     let date = String(today.getDate()).padStart(2, "0");
-    let oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
-    let oneMonth = String(oneMonthAgo.getMonth() + 1).padStart(2, "0");
-    let oneDay = String(oneMonthAgo.getDate()).padStart(2, "0");
     
-    let startDt = oneMonthAgo.getFullYear() + '-'+oneMonth + '-'+oneDay;
+    // 한달 전
+    // let oneMonthAgo = new Date(today.setMonth(today.getMonth() - 1));
+    // let oneMonth = String(oneMonthAgo.getMonth() + 1).padStart(2, "0");
+    // let oneDay = String(oneMonthAgo.getDate()).padStart(2, "0");
+    // let startDt = oneMonthAgo.getFullYear() + '-'+oneMonth + '-'+oneDay;
+    
+    let startDt = year + '-' + month + '-' + date;
     let endDt = year + '-' + month + '-' + date;
     let cp:number = 1; // 첫 페이지 번호
-    let ps:number = 10;
+    let ps:number = 20;
     let rowCount:number = 0;
     let keyword:string = "";
     let sp:number; // 시작 페이지
@@ -54,6 +57,11 @@
     let priceQuantity:number;
 
     const getStockList = async () => {
+        let pageSize = localStorage.getItem('ps');
+        if (pageSize && !isNaN(parseInt(pageSize, 10))) {
+            ps = parseInt(pageSize, 10);
+        }
+
         let data = {
             stock_st:stockSt,
             start_dt:startDt,
@@ -218,7 +226,7 @@
                     </div>
                     <div class="mt-10 display-flex align-items">
                         <input type="search" class="fs-16 pretendard-regular border-default border-radius-4 inp-default padding-8 width-100" bind:value={keyword} on:input={()=>{keyword = keyword; cp = 1; getStockList();}} placeholder="상품 및 지점 명 입력"/>
-                        <button type="button" class="border-none background-none padding-4" on:click={()=>{cp = 1; getStockList();}}>
+                        <button type="button" class="border-none background-none padding-4" aria-label="재고 리스트" on:click={()=>{cp = 1; getStockList();}}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="18" height="18" viewBox="0 0 512 512">
                                 <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
                             </svg>
@@ -232,7 +240,7 @@
             <div class="mt-20 display-flex align-items justify-content-between">
                 <span class="fs-1rem f-nato fw-b">등록 리스트 {rowCount}</span>
                 <div class="display-flex align-items gap-5">
-                    <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/stock/register")}}>재고 등록</button>
+                    <button type="button" class="fs-1rem f-nato fw-b color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/stock/register")}}>재고 등록</button>
                     <div class="display-flex align-items gap-10">
                         <button type="button" class="display-flex align-items gap-5 excel-btn background-color-white border-radius-4 padding-4-8" on:click={downloadStockListToExcel}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-size" width="24" height="22" viewBox="0 0 48 48">
@@ -242,10 +250,10 @@
                                     <path stroke-linejoin="round" d="M4 15h18v18H4zm6 6l6 6m0-6l-6 6"/>
                                 </g>
                             </svg>
-                            <span class="fs-1rem f-nato">엑셀</span>
+                            <span class="fs-1rem f-nato fw-b">엑셀</span>
                         </button>
                     </div>
-                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getStockList}>
+                    <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={()=>{localStorage.setItem('ps', ps.toString()); getStockList()}}>
                         {#each pageSizeDatas as data}
                             <option class="fs-1rem f-nato" value="{data}">{data}</option>
                         {/each}
@@ -368,7 +376,6 @@
                 {#if stockDatas.length !== 0}
                     {#each stockDatas as data}
                         <div class="display-table-row border-b1">
-                            
                             {#if data.stock_st === "1"}
                                 <div class="display-table-cell ta-c padding-12" style="background-color: #c6dfec;">
                                     <span class="fs-1rem pretendard-bold">납품</span>

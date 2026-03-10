@@ -136,6 +136,8 @@ svg {vertical-align: middle;}
 /* Display */
 .display-flex {display: flex;}
 .display-grid {display: grid;}
+.grid {display:grid}
+.grid-template-repeat-2-1 {grid-template-columns: repeat(2, 1fr);}
 .grid-template-3 {grid-template-columns: repeat(auto-fill, minmax(30%, auto));}
 .display-table {display: table; border-collapse: collapse;}
 .display-table-row {display: table-row;}
@@ -146,6 +148,8 @@ svg {vertical-align: middle;}
 .justify-content-between {justify-content: space-between;}
 .justify-content-right {justify-content: right;}
 .justify-content-left {justify-content: left;}
+
+
 
 /* Gap */
 .gap-5 {gap: 5px;}
@@ -247,8 +251,8 @@ svg {vertical-align: middle;}
 .button-second:hover {background-color: rgba(0,0,0,0.2);}
 .button-third-select {background-color: #2A3F54; color: #FFF;}
 
-.button-update {background-color:#2198d5;color:#FFF; border:1px solid #197cad;}
-.button-delete {background-color:tomato;color:#FFF; border:1px solid rgb(254, 75, 44);}
+.button-update {background-color:#2198d5;color:#FFF; border:none;}
+.button-delete {background-color:tomato;color:#FFF; border:none;}
 
 /* input */
 .inp-default {max-width: 300px;}
@@ -264,6 +268,29 @@ svg {vertical-align: middle;}
 .side-svg-fill {fill: #425668; stroke: #425668;}
 .select-menu-bar:hover {background-color: rgba(255,255,255,0.05);}
 .select-menu-bar:hover > svg {fill: #FFF;}
+
+.z-index-99 {z-index: 99;}
+
+/* TABLE */
+.flex-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.flex-table-haeder {
+    border-top: 1px solid #b1b1b1;
+}
+.flex-table-row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #b1b1b1;
+}
+.flex-table-cell {
+    flex: 1;
+    padding: 8px;
+    word-break: break-all;
+}
+
 
 /* 반응형 */
 @media all and (max-width: 1280px){
@@ -300,4 +327,30 @@ svg {vertical-align: middle;}
     .box-defalt {display: block;}
 
     .inp-default {max-width: 100%;}
+
+    /* 반응형 테이블 */
+    .flex-table-haeder {
+        display: none;
+    }
+    .flex-table-row {
+        flex-direction: column;
+        border: 1px solid #b1b1b1;
+        border-radius: 0.25rem;
+        margin-bottom: 12px;
+    }
+    .flex-table-cell {
+        display: block;
+        padding-left: 50%;
+        position: relative;
+        text-align: right;
+        padding: 4px 6px;
+    }
+    .flex-table-cell::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        padding-left: 8px;
+        font-weight: bold;
+        text-align: left;
+    }
 }

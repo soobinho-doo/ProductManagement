@@ -69,7 +69,7 @@ public interface ProductTBMapper {
 			+ "AND a.BRANCH_OFFICE_NM LIKE CONCAT('%',#{branchName},'%')")
 	List<ProductTB> selectExistsStockProductNmByUserId(@Param("branchName")String branchName, @Param("user_id") String user_id);
 	// 유저의 재고가 있는 상품들 For Dashboard
-	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_NM, b.PRODUCT_PRICE, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL "
+	@Select("SELECT a.BRANCH_OFFICE_NM, b.PRODUCT_SQ, b.PRODUCT_NM, b.PRODUCT_PRICE, b.PRODUCT_WEIGHT, b.PRODUCT_WEIGHT_DT, b.PRODUCT_STOCK, b.PRODUCT_SELL, b.PRODUCT_RECALL, b.PRODUCT_COMMISSION "
 			+ "FROM BRANCH_OFFICE_TB a INNER JOIN PRODUCT_TB b ON a.BRANCH_OFFICE_SQ = b.BRANCH_OFFICE_SQ "
 			+ "WHERE 1=1 "
 			+ "AND b.USER_ID = #{user_id} "

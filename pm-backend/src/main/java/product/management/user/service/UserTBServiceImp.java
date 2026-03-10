@@ -72,7 +72,7 @@ public class UserTBServiceImp implements UserTBService {
     		// 리프레쉬 쿠키에 저장
 	        Cookie cookie = new Cookie("rt", refreshToken);
 	        cookie.setHttpOnly(true);
-	        cookie.setMaxAge(24 * 60 * 60); // 1일 설정
+	        cookie.setMaxAge(24 * 60 * 60 * 14); // 14일 설정
 	        cookie.setSecure(false); // 일단 False 해 놓음..
 	        cookie.setPath("/");
 	        //cookie.setDomain("everyrat.com");

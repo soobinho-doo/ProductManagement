@@ -90,7 +90,7 @@
                     </div>
                     <div class="mt-10 display-grid">
                         {#each productDatas as data}
-                            <button type="button" class="fs-1rem pretendard-regular button-hover background-none border-none border-bottom-b1 padding-8" on:click={()=>{productChoice(data)}}>{data.branch_office_nm} {data.product_nm} {priceReplace(data.product_price)}원 {data.product_weight}{data.product_weight_dt} 
+                            <button type="button" class="fs-1rem pretendard-regular button-hover background-none border-none border-bottom-b1 padding-8" on:click={()=>{productChoice(data)}}>{data.branch_office_nm} {data.product_nm} {data.product_stock - data.product_sell - data.product_recall}개 {priceReplace(data.product_price)}원 {data.product_weight}{data.product_weight_dt} 
                             {#if data.product_st === "1"}
                                 <span class="fs-1rem pretendard-regular">기본</span>
                             {:else if data.product_st === "2"}

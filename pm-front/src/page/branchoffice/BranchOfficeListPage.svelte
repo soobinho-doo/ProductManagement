@@ -4,15 +4,12 @@
     import Loading from "../error/Loading.svelte";
     import BranchOfficeModifyComponent from "./BranchOfficeModifyComponent.svelte";
 
-    import { onMount } from "svelte";
     import { link, push } from "svelte-spa-router";
     import {branchOffice} from "../../option/branchOffice";
     import { noti } from "../../option/store";
     import { pageSizeDatas } from "../../option/utill";
 
-    // onMount(() => {
-    //     getBranchOfficeList();
-    // })
+    
 
     // 리스트
     let branchOfficeDatas:any = [];
@@ -25,6 +22,11 @@
     let pageCount:number; // 페이지 개수
     let pageDatas:any = []; 
     const getBranchOfficeList = async () => {
+        let pageSize = localStorage.getItem('ps');
+        if (pageSize && !isNaN(parseInt(pageSize, 10))) {
+            ps = parseInt(pageSize, 10);
+        }
+        
         let data = {
             cp: cp, 
             ps: ps,
@@ -107,13 +109,13 @@
                     </div>
                     <!--  -->
                     <div class="display-flex align-items gap-10">
-                        <button type="button" class="fs-1rem f-nato color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/branchoffice/register")}}>지점 등록</button>
-                        <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={getBranchOfficeList}>
+                        <button type="button" class="fs-1rem f-nato fw-b color-custom-blue button-primary background-none border-default border-radius-4 padding-4-12" on:click={()=>{push("/branchoffice/register")}}>지점 등록</button>
+                        <select class="fs-1rem f-nato border-b1 border-radius-4 padding-4-12" bind:value={ps} on:change={()=>{localStorage.setItem('ps', ps.toString()); getBranchOfficeList()}}>
                             {#each pageSizeDatas as data}
                                 <option class="fs-1rem f-nato" value="{data}">{data}</option>
                             {/each}
                         </select>
-                        <button type="button" class="background-none border-b1 border-radius-4 padding-8-10" on:click={()=>{promise = getBranchOfficeList()}}>
+                        <button type="button" class="background-none border-b1 border-radius-4 padding-8-10" aria-label="지점 리스트" on:click={()=>{promise = getBranchOfficeList()}}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-fill svg-size" width="18" height="18" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
                                     <path d="M20.5 8c-1.392-3.179-4.823-5-8.522-5C7.299 3 3.453 6.552 3 11.1"/>
@@ -126,23 +128,25 @@
                 </div>
 
                 <!-- 리스트 테이블 -->
-                <div class="mt-10 border-right-b1 border-left-b1">
-                    <div class="width-100 display-flex align-items bg-light-gray border-top-b1 border-bottom-b1">
-                        <span class="fs-125rem f-nato fw-b width-35 padding-8">지점</span>
-                        <span class="fs-125rem f-nato fw-b width-35 padding-8 ta-c">지역</span>
-                        <span class="fs-125rem f-nato fw-b width-30 padding-8 ta-c">설정</span>
-                    </div>
+                <div class="mt-10">
                     {#if branchOfficeDatas.length !== 0}
-                        {#each branchOfficeDatas as data}
-                            <div class="width-100 display-flex align-items border-bottom-b1">
-                                <span class="fs-1rem f-nato width-35 padding-8">{data.branch_office_nm}</span>
-                                <span class="fs-1rem f-nato width-35 padding-8 ta-c">{data.branch_office_area}</span>
-                                <span class="display-flex align-items justify-content-center gap-10 width-30 padding-8">
-                                    <button type="button" class="fs-1rem f-nato button-update border-radius-4 padding-4-8" on:click={()=>{getBranchOfficeButton(data.branch_office_sq)}}>수정</button>
-                                    <button type="button" class="fs-1rem f-nato button-delete border-radius-4 padding-4-8" on:click={()=>{deleteBranchOfficeButton(data.branch_office_sq)}}>삭제</button>
-                                </span>
+                        <div class="table">
+                            <div class="flex-table-row flex-table-haeder bg-light-gray">
+                                <div class="flex-table-cell f-nato-bold">지점</div>
+                                <div class="flex-table-cell f-nato-bold ta-c">지역</div>
+                                <div class="flex-table-cell f-nato-bold ta-c">설정</div>
                             </div>
-                        {/each}
+                            {#each branchOfficeDatas as data}
+                                <div class="flex-table-row">
+                                    <div class="flex-table-cell fs-sm" data-label="지점">{data.branch_office_nm}</div>
+                                    <div class="flex-table-cell fs-sm ta-c" data-label="지역">{data.branch_office_area}</div>
+                                    <div class="flex-table-cell fs-sm ta-c" data-label="설정">
+                                        <button type="button" class="fs-1rem f-nato fw-b button-update border-radius-4 padding-4-8" on:click={()=>{getBranchOfficeButton(data.branch_office_sq)}}>수정</button>
+                                        <button type="button" class="fs-1rem f-nato fw-b button-delete border-radius-4 padding-4-8" on:click={()=>{deleteBranchOfficeButton(data.branch_office_sq)}}>삭제</button>
+                                    </div>
+                                </div>
+                            {/each}
+                        </div>
                     {:else}
                         <div class="mt-30 ta-c">
                             <p class="fs-1rem pretendard-regular">등록 된 지점이 없습니다</p>
@@ -181,7 +185,7 @@
         {/await}
     
         <!-- div height -->
-        <div style="height: 100;"></div>
+        <div style="height: 100px;"></div>
 
     </div>
 
