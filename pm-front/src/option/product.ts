@@ -24,7 +24,7 @@ function setProduct () {
     }
 
     //
-    const hasList = async (cp:number, ps:number, branchOfficeName:string) => {
+    const hasList = async (cp:number, ps:number, branchOfficeName:string, keyword:string) => {
         const accessToken = get(auth).Authorization;
         try{
             const options = {
@@ -32,7 +32,8 @@ function setProduct () {
                 data : {
                     cp: cp,
                     ps: ps,
-                    branchOfficeName: branchOfficeName
+                    branchOfficeName: branchOfficeName, 
+                    keyword: keyword
                 },
                 accessToken : accessToken,
             }

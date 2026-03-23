@@ -189,9 +189,9 @@
         <div class="mt-10 padding-12 box-shadow-primary background-color-white">
             <p class="fs-20 pretendard-bold">재고 리스트</p>
             <div class="mt-10 display-flex align-items gap-5">
-                <span class="fs-14 prtendard-regular">재고 관리</span>
-                <span class="fs-14 prtendard-regular">/</span>
-                <span class="fs-14 prtendard-regular">재고 리스트</span>
+                <span class="prtendard-regular">재고 관리</span>
+                <span class="prtendard-regular">/</span>
+                <span class="prtendard-regular">재고 리스트</span>
             </div>
         </div>
 

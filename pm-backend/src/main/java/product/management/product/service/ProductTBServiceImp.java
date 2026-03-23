@@ -124,12 +124,13 @@ public class ProductTBServiceImp implements ProductTBService {
 		int ps = Integer.parseInt(map.get("ps"));
 		int calPage = (cp-1) * ps;
 		String branchOfficeName = map.get("branchOfficeName");
+		String keyword = map.get("keyword");
 		
 		String token = request.getHeader("Authorization");
 		String user_id = jwtProvider.getIdByToken(token);
 		
-		int rowCount = productTBMapper.selectExistsProductTBsCount(user_id, branchOfficeName);
-		List<ProductTB> list = productTBMapper.selectExistsProductTBs(user_id, branchOfficeName, calPage, ps);
+		int rowCount = productTBMapper.selectExistsProductTBsCount(user_id, branchOfficeName, keyword);
+		List<ProductTB> list = productTBMapper.selectExistsProductTBs(user_id, branchOfficeName, keyword, calPage, ps);
 		
 		int pageCount = (int)(Math.ceil((double)rowCount/ps));
 		

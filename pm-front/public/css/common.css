@@ -37,6 +37,7 @@ p {margin:0px; color:var(--text-black);}
 span {color:var(--text-black);}
 button { cursor: pointer; color:var(--text-black); padding:0px;}
 img {max-width:100%;}
+h1,  h2, h3, h4 {margin:0; padding:0;}
 #app {height:100%;}
 
 /* Font-Style */
@@ -139,6 +140,8 @@ svg {vertical-align: middle;}
 .grid {display:grid}
 .grid-template-repeat-2-1 {grid-template-columns: repeat(2, 1fr);}
 .grid-template-3 {grid-template-columns: repeat(auto-fill, minmax(30%, auto));}
+.grid-template-4-1 {grid-template-columns: 4fr 1fr;}
+.grid-template-5-1 {grid-template-columns: 5fr 1fr;}
 .display-table {display: table; border-collapse: collapse;}
 .display-table-row {display: table-row;}
 .display-table-cell {display: table-cell;}
@@ -299,9 +302,6 @@ svg {vertical-align: middle;}
 
 @media all and (max-width: 768px){
     .layout-768 {width: 100%;}
-    html{
-        font-size:90%;
-    }
     .side-menu-bar:not(.side-menu-bar-end):not(.show) {
         margin-left: calc(var(--cal-side-menu-bar-width)*-1);
     }
@@ -313,13 +313,10 @@ svg {vertical-align: middle;}
 }
 
 @media all and (max-width: 480px){
-    html{
-        font-size:80%;
-    }
     .svg-size {width: 16px; height: 16px;}
     .mt-100 {margin-top: 50px;}
 
-    .layout-480 {width: 100%; padding: 4px;}
+    .layout-480 {width: 100%; padding: 12px;}
 
     .mobile-width-100 {width: 100%;}
     .min-width-250 {min-width: 100%;}

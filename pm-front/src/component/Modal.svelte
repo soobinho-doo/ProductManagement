@@ -40,7 +40,7 @@
     .modal { max-width: 400px; min-width: 400px; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index: 10;}
     
     .modal-title {background: #2A3F54; padding: 8px 12px; border-top-right-radius: 4px; border-top-left-radius: 4px;}
-    .modal-content {max-height: 600px; overflow-y: auto; padding: 16px 10px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;}
+    .modal-content {max-height: 600px; min-height: 450px; overflow-y: auto; padding: 16px 10px; border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;}
     .modal-content::-webkit-scrollbar { width: 10px;}
     .modal-content::-webkit-scrollbar-thumb { background-color: #909090; border-radius: 2px;}
     .modal-content::-webkit-scrollbar-track { background-color: transparent; }

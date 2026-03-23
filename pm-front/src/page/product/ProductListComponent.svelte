@@ -71,11 +71,29 @@
         branchOfficeSq = 0;
         branchOfficeName = "";
     }
+
+    function removeKeyword () {
+        keyword = "";
+        getProductList();
+    }
 </script>
 
 <Modal bind:isModal={isProduct}>
     <span slot="modal-title" class="fs-1rem pretendard-bold color-white">상품 리스트</span>
     <div slot="modal-content">
+        <div class="grid grid-template-5-1 gap-5">
+            <input 
+                type="text" 
+                class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-6-12" 
+                bind:value={keyword} 
+                placeholder="상품 검색" 
+                on:input={getProductList}/>
+            <button type="button" class="background-none border-default border-radius-4 padding-6-12" aria-label="refresh" on:click={removeKeyword}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12t2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v7h-7V9h4.2q-.8-1.4-2.187-2.2T12 6Q9.5 6 7.75 7.75T6 12t1.75 4.25T12 18q1.925 0 3.475-1.1T17.65 14h2.1q-.7 2.65-2.85 4.325T12 20" />
+                </svg>
+            </button>
+        </div>
         {#await getProductList()} 
             <Loading/>
         {:then} 
@@ -86,7 +104,7 @@
                         <a href="/product/register" class="fs-1rem pretendard-regular color-tomato" use:link>상품 등록 하기</a>
                     </div>
                 {:else}
-                    <div>
+                    <div class="mt-5 grid">
                         <button type="button" class="fs-1rem pretendard-regular background-none border-default border-radius-4 padding-6-12 when-480" on:click={openBranshOffice}>
                             {#if branchOfficeName}
                                 {branchOfficeName}

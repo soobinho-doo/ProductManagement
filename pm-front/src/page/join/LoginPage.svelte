@@ -68,13 +68,16 @@
                     <span class="fs-18 pretendard-bold">Product Management</span>
                 </div>
                 <div class="padding-6">
-                    <p class="fs-16 pretendard-regular color-b1">Product Management WEB</p>
+                    <h4 class="pretendard-regular color-b1">효율적인 자산 관리를 위한 상품 재고 관리 WEB (Free)</h4>
                 </div>
             </div>
 
             <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="#b1b1b1">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24">
+                    <g fill="none" fill-rule="evenodd">
+                        <path d="m12.594 23.258l-.012.002l-.071.035l-.02.004l-.014-.004l-.071-.036q-.016-.004-.024.006l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.016-.018m.264-.113l-.014.002l-.184.093l-.01.01l-.003.011l.018.43l.005.012l.008.008l.201.092q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.003-.011l.018-.43l-.003-.012l-.01-.01z" />
+                        <path fill="#b1b1b1" d="M4 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm14 0H6v16h12zm-6.452 2.763a1 1 0 0 1 0 1.414L9.603 10.12a1.25 1.25 0 0 1-1.767 0l-.884-.884a1 1 0 1 1 1.414-1.414l.354.354l1.414-1.414a1 1 0 0 1 1.414 0ZM13 9a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1m-6 4.5A1.5 1.5 0 0 1 8.5 12h2a1.5 1.5 0 0 1 1.5 1.5v2a1.5 1.5 0 0 1-1.5 1.5h-2A1.5 1.5 0 0 1 7 15.5zm2 .5v1h1v-1zm4 .5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1" />
+                    </g>
                 </svg>
             </div>
         </div>
@@ -85,13 +88,13 @@
         <div class="layout-480">
             <div class="mt-30">
                 <div class="mt-10">
-                    <input type="text" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userId} bind:this={userIdElement} placeholder="아이디"/>
+                    <input type="text" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-4 background-color-b1 inp-primary" bind:value={userId} bind:this={userIdElement} placeholder="아이디"/>
                 </div>
             </div>
             
             <div class="mt-20">
                 <div class="mt-10 position-relative">
-                    <input type="password" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-color-b1 inp-primary" bind:value={userPass} bind:this={userPassElement} placeholder="패스워드"/>
+                    <input type="password" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-4 background-color-b1 inp-primary" bind:value={userPass} bind:this={userPassElement} placeholder="패스워드"/>
                     <button type="button" class="background-none border-none pass-icon" on:click={passChange}>
                         {#if isShowPass}
                             <svg xmlns="http://www.w3.org/2000/svg" class="svg-color-change" width="22" height="22" viewBox="0 0 576 512">
@@ -111,10 +114,10 @@
             </div>
 
             <div class="mt-50">
-                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={loginBtn}>로그인</button>
+                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-4 background-none button-second" on:click={loginBtn}>로그인</button>
             </div>
             <div class="mt-10">
-                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-8 background-none button-second" on:click={() => {push("/register")}}>회원가입</button>
+                <button type="button" class="fs-1rem pretendard-regular padding-12-16 width-100 border-none border-radius-4 background-none button-second" on:click={() => {push("/register")}}>회원가입</button>
             </div>
             <div class="mt-20">
                 <div class="display-flex align-items justify-content-right gap-10">

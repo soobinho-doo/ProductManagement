@@ -32,9 +32,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	//
-	implementation 'com.zaxxer:HikariCP:5.1.0'
-	implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.2'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	implementation 'com.zaxxer:HikariCP:6.3.3'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.7'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.5'
 	
 	//
 	implementation 'org.springframework.boot:spring-boot-starter-security:3.2.2'
@@ -45,7 +45,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
     
     // Mail
-    implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.2'
+   	implementation 'org.springframework.boot:spring-boot-starter-mail:3.5.12'
     
     // Excel
     implementation 'org.apache.poi:poi:5.2.5'

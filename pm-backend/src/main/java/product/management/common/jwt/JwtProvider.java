@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +64,10 @@ public class JwtProvider {
     
     // 키 세팅
     private SecretKey setSecretKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+//        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    	// 문자열을 Base64로 디코딩한 후 키를 생성합니다.
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
     
  // AccessToken에 담겨져 있는 유저 ID 흭득
